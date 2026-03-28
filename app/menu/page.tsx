@@ -1,6 +1,6 @@
 ﻿export const dynamic = "force-dynamic";
 
-import { redirect } from "next/navigation";
+import Link from "next/link";
 import { CategorySection } from "@/components/menu/category-section";
 import { MenuCartBar } from "@/components/menu/menu-cart-bar";
 import { prisma } from "@/lib/prisma";
@@ -32,7 +32,28 @@ export default async function MenuPage() {
   ]);
 
   if (!categories.length) {
-    redirect("/");
+    return (
+      <section className="mx-auto flex w-full max-w-4xl flex-1 items-center py-10">
+        <div className="surface w-full p-8 sm:p-10">
+          <span className="inline-flex rounded-full border border-stone-200 bg-white px-4 py-2 text-sm text-stone-600">
+            Menu empty
+          </span>
+          <h1 className="mt-5 text-4xl font-bold text-stone-950">Menu hien chua co du lieu.</h1>
+          <p className="mt-4 max-w-3xl text-lg leading-8 text-stone-600">
+            Production database da ket noi thanh cong, nhung hien tai chua co danh muc hoac mon nao de hien thi cho khach.
+            Ban co the dang nhap khu quan tri de them mon, cap nhat anh san pham, hoac seed du lieu ban dau neu day la database moi.
+          </p>
+          <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+            <Link href="/admin/login" className="button-primary">
+              Vao khu quan tri
+            </Link>
+            <Link href="/cart" className="button-secondary">
+              Mo gio hang
+            </Link>
+          </div>
+        </div>
+      </section>
+    );
   }
 
   return (
