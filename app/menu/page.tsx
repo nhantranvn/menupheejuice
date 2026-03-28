@@ -10,16 +10,16 @@ function EmptyState({ title, description }: { title: string; description: string
     <section className="mx-auto flex w-full max-w-4xl flex-1 items-center py-10">
       <div className="surface w-full p-8 sm:p-10">
         <span className="inline-flex rounded-full border border-stone-200 bg-white px-4 py-2 text-sm text-stone-600">
-          Menu status
+          Trạng thái menu
         </span>
         <h1 className="mt-5 text-4xl font-bold text-stone-950">{title}</h1>
         <p className="mt-4 max-w-3xl text-lg leading-8 text-stone-600">{description}</p>
         <div className="mt-8 flex flex-col gap-3 sm:flex-row">
           <Link href="/admin/login" className="button-primary">
-            Vao khu quan tri
+            Vào khu quản trị
           </Link>
           <Link href="/cart" className="button-secondary">
-            Mo gio hang
+            Mở giỏ hàng
           </Link>
         </div>
       </div>
@@ -57,8 +57,8 @@ export default async function MenuPage() {
     if (!categories.length) {
       return (
         <EmptyState
-          title="Menu hien chua co du lieu."
-          description="Production database da ket noi thanh cong, nhung hien tai chua co danh muc hoac mon nao de hien thi cho khach. Ban co the dang nhap khu quan tri de them mon, cap nhat anh san pham, hoac seed du lieu ban dau neu day la database moi."
+          title="Menu hiện chưa có dữ liệu."
+          description="Production database đã kết nối thành công, nhưng hiện tại chưa có danh mục hoặc món nào để hiển thị cho khách. Bạn có thể đăng nhập khu quản trị để thêm món, cập nhật ảnh sản phẩm, hoặc seed dữ liệu ban đầu nếu đây là database mới."
         />
       );
     }
@@ -70,10 +70,10 @@ export default async function MenuPage() {
             <p className="text-sm uppercase tracking-[0.2em] text-orange-600">PHEE JUICE MENU</p>
             <div className="mt-3 flex flex-col gap-4">
               <div>
-                <h1 className="text-3xl font-bold text-stone-950 sm:text-4xl">Cham vao mon de chon topping va upsize 700ml</h1>
+                <h1 className="text-3xl font-bold text-stone-950 sm:text-4xl">Chạm vào món để chọn topping và upsize 700ml</h1>
                 <p className="mt-3 max-w-3xl text-stone-600">
-                  Khach co the xem menu va dat truc tiep khong can dang nhap. Mon nao het hang van se hien trong menu de de theo doi,
-                  nhung se khong the them vao gio cho den khi quan mo ban lai.
+                  Khách có thể xem menu và đặt trực tiếp không cần đăng nhập. Món nào hết hàng vẫn sẽ hiện trong menu để dễ theo dõi,
+                  nhưng sẽ không thể thêm vào giỏ cho đến khi quán mở bán lại.
                 </p>
               </div>
               <div className="flex gap-3 overflow-x-auto pb-1">
@@ -105,8 +105,8 @@ export default async function MenuPage() {
 
     return (
       <EmptyState
-        title="Menu tam thoi chua kha dung."
-        description="Website da deploy thanh cong, nhung production database dang gap loi ket noi hoac schema chua san sang. Ban co the dang nhap khu quan tri sau khi kiem tra migration, seed du lieu, va DATABASE_URL tren Vercel."
+        title="Menu tạm thời chưa khả dụng."
+        description="Website đã deploy thành công, nhưng production database đang gặp lỗi kết nối hoặc schema chưa sẵn sàng. Bạn có thể đăng nhập khu quản trị sau khi kiểm tra migration, seed dữ liệu, và DATABASE_URL trên Vercel."
       />
     );
   }

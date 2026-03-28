@@ -9,6 +9,7 @@ export const orderItemSchema = z.object({
   menuItemId: z.string().min(1),
   variantId: z.string().min(1),
   toppings: z.array(orderItemToppingSchema).max(8),
+  note: z.string().trim().max(180).optional().or(z.literal("")),
   quantity: z.number().int().min(1).max(20),
 });
 

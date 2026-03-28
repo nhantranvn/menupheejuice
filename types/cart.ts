@@ -17,5 +17,6 @@ export type CartItem = {
   basePrice: number;
   toppings: CartTopping[];
   totalPrice: number;
+  note: string;
   quantity: number;
 };

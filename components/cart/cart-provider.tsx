@@ -9,6 +9,7 @@ type CartContextValue = {
   totalAmount: number;
   addItem: (item: Omit<CartItem, "quantity">) => void;
   updateQuantity: (cartItemId: string, quantity: number) => void;
+  updateItemNote: (cartItemId: string, note: string) => void;
   removeItem: (cartItemId: string) => void;
   clearCart: () => void;
 };
@@ -80,6 +81,17 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
 
             return [{ ...item, quantity }];
           }),
+        ),
+      updateItemNote: (cartItemId, note) =>
+        setItems((current) =>
+          current.map((item) =>
+            item.cartItemId === cartItemId
+              ? {
+                  ...item,
+                  note,
+                }
+              : item,
+          ),
         ),
       removeItem: (cartItemId) => setItems((current) => current.filter((item) => item.cartItemId !== cartItemId)),
       clearCart: () => setItems([]),

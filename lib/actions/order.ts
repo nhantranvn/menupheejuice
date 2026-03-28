@@ -16,6 +16,7 @@ type CreateOrderInput = {
       toppingId: string;
       quantity: number;
     }>;
+    note?: string;
     quantity: number;
   }>;
 };
@@ -109,6 +110,7 @@ export async function createOrderAction(input: CreateOrderInput) {
       quantity: item.quantity,
       variantName: variant.name,
       unitPrice,
+      note: item.note?.trim() || null,
       toppings: selectedToppings,
     };
   });
@@ -144,6 +146,7 @@ export async function createOrderAction(input: CreateOrderInput) {
           quantity: item.quantity,
           variantName: item.variantName,
           unitPrice: item.unitPrice,
+          note: item.note,
           toppings: {
             create: item.toppings.map((topping) => ({
               toppingId: topping.toppingId,

@@ -10,7 +10,7 @@ import { formatCurrency } from "@/lib/utils";
 
 export function CartPage() {
   const router = useRouter();
-  const { items, totalAmount, updateQuantity, removeItem, clearCart } = useCart();
+  const { items, totalAmount, updateQuantity, updateItemNote, removeItem, clearCart } = useCart();
   const [customerName, setCustomerName] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [deliveryAddress, setDeliveryAddress] = useState("");
@@ -47,8 +47,8 @@ export function CartPage() {
           <div className="mt-8 space-y-4">
             {items.map((item) => (
               <div key={item.cartItemId} className="rounded-3xl border border-stone-200 bg-white p-5">
-                <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-                  <div>
+                <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+                  <div className="min-w-0 flex-1">
                     <p className="text-lg font-semibold">{item.name}</p>
                     <p className="mt-1 text-sm text-stone-500">
                       {item.variantName} • {formatCurrency(item.basePrice)}
@@ -60,8 +60,21 @@ export function CartPage() {
                     ) : (
                       <p className="mt-1 text-sm text-stone-400">Không thêm topping</p>
                     )}
+                    <div className="mt-4">
+                      <label htmlFor={`note-${item.cartItemId}`} className="text-sm font-medium text-stone-700">
+                        Ghi chú riêng cho món này
+                      </label>
+                      <textarea
+                        id={`note-${item.cartItemId}`}
+                        rows={2}
+                        className="input-field mt-2 resize-none"
+                        placeholder="Ví dụ: ít đá, ít ngọt, tách riêng topping..."
+                        value={item.note}
+                        onChange={(event) => updateItemNote(item.cartItemId, event.target.value)}
+                      />
+                    </div>
                   </div>
-                  <div className="flex items-center gap-3">
+                  <div className="flex items-center gap-3 sm:pt-1">
                     <div className="flex items-center rounded-full border border-stone-200 bg-stone-50 p-1">
                       <button
                         type="button"
@@ -174,6 +187,7 @@ export function CartPage() {
                 items: items.map((item) => ({
                   menuItemId: item.menuItemId,
                   variantId: item.variantId,
+                  note: item.note,
                   toppings: item.toppings.map((topping) => ({
                     toppingId: topping.id,
                     quantity: topping.quantity,

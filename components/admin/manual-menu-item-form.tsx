@@ -43,36 +43,20 @@ export function ManualMenuItemForm({ categories }: Props) {
         cốc 500ml giá 30.000đ và cốc 700ml giá 40.000đ.
       </p>
 
-      <div className="mt-6 grid gap-5 xl:grid-cols-[1.1fr_0.9fr]">
+      <div className="mt-6 grid gap-4 md:grid-cols-2">
         <div>
-          <fieldset>
-            <legend className="text-sm font-medium text-stone-700">Chọn danh mục có sẵn</legend>
-            <div className="mt-2 overflow-hidden rounded-3xl border border-stone-200 bg-white">
-              {categories.length === 0 ? (
-                <div className="px-4 py-4 text-sm text-stone-500">Chưa có danh mục nào. Bạn có thể nhập tên danh mục mới ở cột bên cạnh.</div>
-              ) : (
-                <div className="divide-y divide-stone-100">
-                  {categories.map((category) => (
-                    <label
-                      key={category.id}
-                      className="flex cursor-pointer items-center justify-between gap-4 px-4 py-3 transition hover:bg-stone-50"
-                    >
-                      <div>
-                        <p className="font-medium text-stone-900">{category.name}</p>
-                        <p className="text-sm text-stone-500">Thêm món mới vào danh mục này</p>
-                      </div>
-                      <input
-                        type="radio"
-                        name="categoryId"
-                        value={category.id}
-                        className="h-4 w-4 border-stone-300 text-orange-600"
-                      />
-                    </label>
-                  ))}
-                </div>
-              )}
-            </div>
-          </fieldset>
+          <label htmlFor="categoryId" className="text-sm font-medium text-stone-700">
+            Chọn danh mục có sẵn
+          </label>
+          <select id="categoryId" name="categoryId" className="input-field mt-2 bg-white">
+            <option value="">-- Chọn danh mục --</option>
+            {categories.map((category) => (
+              <option key={category.id} value={category.id}>
+                {category.name}
+              </option>
+            ))}
+          </select>
+          <p className="mt-2 text-sm text-stone-500">Chọn nhanh một danh mục có sẵn rồi nhập món mới vào đúng nhóm đó.</p>
         </div>
 
         <div>

@@ -1,5 +1,6 @@
 ﻿"use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { useSession } from "next-auth/react";
 import { ClipboardList, ImagePlus, ShieldCheck } from "lucide-react";
@@ -14,14 +15,13 @@ export function NavbarClient() {
 
   return (
     <header className="sticky top-0 z-40 border-b border-stone-200/70 bg-white/90 backdrop-blur">
-      <div className="mx-auto flex h-20 w-full max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
-        <Link href="/" className="flex items-center gap-3">
-          <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-stone-950 text-sm font-bold tracking-[0.18em] text-orange-300">
-            PJ
-          </div>
-          <div>
-            <p className="text-lg font-semibold">PHEE JUICE</p>
-            <p className="text-sm text-stone-500">Dat mon truc tuyen cho quan nuoc</p>
+      <div className="mx-auto flex h-20 w-full max-w-7xl items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
+        <Link href="/" className="flex min-w-0 items-center gap-3">
+          <Image src="/phee-juice-logo.svg" alt="Phee Juice logo" width={44} height={44} className="h-11 w-11 rounded-2xl object-contain" />
+          <div className="min-w-0">
+            <p className="text-lg font-semibold">Phee Juice Trần Cung</p>
+            <p className="text-sm text-stone-500">Đặt món trực tuyến cho quán nước</p>
+            <p className="text-xs text-stone-400">0984.339.499 • 36 ngõ 120 Trần Cung</p>
           </div>
         </Link>
 
@@ -31,13 +31,13 @@ export function NavbarClient() {
               href="/menu"
               className="rounded-full px-4 py-2 text-sm font-medium text-stone-600 transition hover:bg-stone-100 hover:text-stone-950"
             >
-              Thuc don
+              Thực đơn
             </Link>
             <Link
               href="/cart"
               className="rounded-full px-4 py-2 text-sm font-medium text-stone-600 transition hover:bg-stone-100 hover:text-stone-950"
             >
-              Gio hang
+              Giỏ hàng
             </Link>
             {isReady && isLoggedIn ? (
               <Link
@@ -45,7 +45,7 @@ export function NavbarClient() {
                 className="inline-flex items-center rounded-full px-4 py-2 text-sm font-medium text-stone-600 transition hover:bg-stone-100 hover:text-stone-950"
               >
                 <ClipboardList className="mr-2 h-4 w-4" />
-                Don cua toi
+                Đơn của tôi
               </Link>
             ) : null}
             {isReady && isAdmin ? (
@@ -55,14 +55,14 @@ export function NavbarClient() {
                   className="inline-flex items-center rounded-full px-4 py-2 text-sm font-medium text-orange-700 transition hover:bg-orange-50"
                 >
                   <ShieldCheck className="mr-2 h-4 w-4" />
-                  Quan tri
+                  Quản trị
                 </Link>
                 <Link
                   href="/admin/menu-items"
                   className="inline-flex items-center rounded-full px-4 py-2 text-sm font-medium text-stone-600 transition hover:bg-stone-100 hover:text-stone-950"
                 >
                   <ImagePlus className="mr-2 h-4 w-4" />
-                  Anh mon
+                  Ảnh món
                 </Link>
               </>
             ) : null}

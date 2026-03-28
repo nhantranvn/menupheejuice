@@ -111,6 +111,7 @@ export function MenuItemConfigurator({ item, toppings, trigger, disabled = false
       basePrice: selectedVariant.price,
       toppings: selectedToppings,
       totalPrice,
+      note: "",
     });
 
     setIsAdded(true);

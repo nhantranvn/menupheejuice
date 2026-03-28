@@ -1,4 +1,4 @@
-import type { OrderStatus } from "@prisma/client";
+﻿import type { OrderStatus } from "@prisma/client";
 import { OrderStatusForm } from "@/components/admin/order-status-form";
 import { OrderSummaryCard } from "@/components/orders/order-summary-card";
 
@@ -21,6 +21,7 @@ type Props = {
       quantity: number;
       unitPrice: number;
       variantName: string;
+      note: string | null;
       menuItem: {
         name: string;
       };

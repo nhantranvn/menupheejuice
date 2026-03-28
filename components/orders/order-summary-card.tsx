@@ -1,4 +1,4 @@
-import { StatusBadge } from "@/components/admin/status-badge";
+﻿import { StatusBadge } from "@/components/admin/status-badge";
 import { formatCurrency, formatDateTime } from "@/lib/utils";
 import type { OrderStatus } from "@prisma/client";
 
@@ -17,6 +17,7 @@ type Props = {
       quantity: number;
       unitPrice: number;
       variantName: string;
+      note: string | null;
       menuItem: {
         name: string;
       };
@@ -83,6 +84,7 @@ export function OrderSummaryCard({ order, title, customer, actionSlot }: Props) 
                       Topping: {item.toppings.map((topping) => `${topping.name} x${topping.quantity} (+${formatCurrency(topping.lineTotal)})`).join(", ")}
                     </p>
                   ) : null}
+                  {item.note ? <p className="mt-2 text-xs text-stone-500">Ghi chú món: {item.note}</p> : null}
                 </div>
               ))}
             </div>

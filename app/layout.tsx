@@ -4,8 +4,8 @@ import { NavbarClient } from "@/components/layout/navbar-client";
 import { AppProviders } from "@/components/providers/app-providers";
 
 export const metadata: Metadata = {
-  title: "Bep Nha Minh",
-  description: "MVP web dat mon cho quan an voi Next.js 14, Prisma va Auth.js",
+  title: "Phee Juice Trần Cung",
+  description: "Đặt món trực tuyến cho Phee Juice Trần Cung với Next.js 14, Prisma và Auth.js",
 };
 
 export default function RootLayout({
