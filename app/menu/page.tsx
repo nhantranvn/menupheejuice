@@ -1,4 +1,6 @@
-﻿import { redirect } from "next/navigation";
+﻿export const dynamic = "force-dynamic";
+
+import { redirect } from "next/navigation";
 import { CategorySection } from "@/components/menu/category-section";
 import { MenuCartBar } from "@/components/menu/menu-cart-bar";
 import { prisma } from "@/lib/prisma";
@@ -40,10 +42,10 @@ export default async function MenuPage() {
           <p className="text-sm uppercase tracking-[0.2em] text-orange-600">PHEE JUICE MENU</p>
           <div className="mt-3 flex flex-col gap-4">
             <div>
-              <h1 className="text-3xl font-bold text-stone-950 sm:text-4xl">Chạm vào món để chọn topping và upsize 700ml</h1>
+              <h1 className="text-3xl font-bold text-stone-950 sm:text-4xl">Cham vao mon de chon topping va upsize 700ml</h1>
               <p className="mt-3 max-w-3xl text-stone-600">
-                Khách có thể xem menu và đặt trực tiếp không cần đăng nhập. Món nào hết hàng vẫn sẽ hiện trong menu để dễ theo dõi,
-                nhưng sẽ không thể thêm vào giỏ cho đến khi quán mở bán lại.
+                Khach co the xem menu va dat truc tiep khong can dang nhap. Mon nao het hang van se hien trong menu de de theo doi,
+                nhung se khong the them vao gio cho den khi quan mo ban lai.
               </p>
             </div>
             <div className="flex gap-3 overflow-x-auto pb-1">
