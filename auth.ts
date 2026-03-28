@@ -4,15 +4,21 @@ import authConfig from "@/auth.config";
 import { prisma } from "@/lib/prisma";
 
 const adminEmail = process.env.ADMIN_EMAIL?.toLowerCase();
+const isBuildPhase = process.env.NEXT_PHASE === "phase-production-build";
+const shouldUseDatabase = !isBuildPhase && Boolean(process.env.DATABASE_URL);
 
 export const { auth, handlers, signIn, signOut } = NextAuth({
   ...authConfig,
-  adapter: PrismaAdapter(prisma),
+  adapter: shouldUseDatabase ? PrismaAdapter(prisma) : undefined,
   session: {
     strategy: "jwt",
   },
   callbacks: {
     async signIn({ user }) {
+      if (!shouldUseDatabase) {
+        return true;
+      }
+
       if (!user.email) {
         return false;
       }
@@ -37,6 +43,10 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
       return true;
     },
     async jwt({ token, user, trigger, session }) {
+      if (!shouldUseDatabase) {
+        return token;
+      }
+
       if (user?.email) {
         const existingUser = await prisma.user.findUnique({
           where: { email: user.email.toLowerCase() },
@@ -72,6 +82,10 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
       return token;
     },
     async session({ session, token }) {
+      if (!shouldUseDatabase) {
+        return session;
+      }
+
       if (session.user && token.sub) {
         session.user.id = token.sub;
         session.user.role = (token.role as "ADMIN" | "CUSTOMER" | undefined) ?? "CUSTOMER";
