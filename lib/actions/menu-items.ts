@@ -324,6 +324,41 @@ export async function deleteMenuItemAction(input: { menuItemId: string }) {
   return { ok: true, message: `Đã xóa món ${menuItem.name}.` };
 }
 
+export async function deleteMenuCategoryAction(input: { categoryId: string }) {
+  const session = await auth();
+
+  if (session?.user?.role !== "ADMIN") {
+    return { ok: false, error: "Bạn không có quyền xóa danh mục." };
+  }
+
+  const category = await prisma.menuCategory.findUnique({
+    where: { id: input.categoryId },
+    include: {
+      _count: {
+        select: {
+          items: true,
+        },
+      },
+    },
+  });
+
+  if (!category) {
+    return { ok: false, error: "Không tìm thấy danh mục cần xóa." };
+  }
+
+  if (category._count.items > 0) {
+    return { ok: false, error: "Chỉ xóa được danh mục đang trống. Hãy chuyển hoặc xóa hết món trong danh mục trước." };
+  }
+
+  await prisma.menuCategory.delete({
+    where: { id: category.id },
+  });
+
+  revalidateMenuPaths();
+
+  return { ok: true, message: `Đã xóa danh mục ${category.name}.` };
+}
+
 export async function createManualMenuItemAction(formData: FormData) {
   const session = await auth();
 

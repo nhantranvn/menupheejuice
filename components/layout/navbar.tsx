@@ -7,6 +7,7 @@ import { SignOutButton } from "@/components/auth/sign-out-button";
 
 export async function Navbar() {
   const session = await auth();
+  const isAdmin = session?.user?.role === "ADMIN";
 
   return (
     <header className="sticky top-0 z-40 border-b border-stone-200/70 bg-white/90 backdrop-blur">
@@ -28,13 +29,13 @@ export async function Navbar() {
             <Link href="/cart" className="rounded-full px-4 py-2 text-sm font-medium text-stone-600 transition hover:bg-stone-100 hover:text-stone-950">
               Giỏ hàng
             </Link>
-            {session?.user ? (
+            {session?.user && !isAdmin ? (
               <Link href="/orders" className="inline-flex items-center rounded-full px-4 py-2 text-sm font-medium text-stone-600 transition hover:bg-stone-100 hover:text-stone-950">
                 <ClipboardList className="mr-2 h-4 w-4" />
                 Đơn của tôi
               </Link>
             ) : null}
-            {session?.user.role === "ADMIN" ? (
+            {isAdmin ? (
               <>
                 <Link href="/admin/orders" className="inline-flex items-center rounded-full px-4 py-2 text-sm font-medium text-orange-700 transition hover:bg-orange-50">
                   <ShieldCheck className="mr-2 h-4 w-4" />

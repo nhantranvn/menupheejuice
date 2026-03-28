@@ -5,11 +5,12 @@ import { redirect } from "next/navigation";
 import { auth } from "@/auth";
 import { InitializeStarterMenuButton } from "@/components/admin/initialize-starter-menu-button";
 import { ManualMenuItemForm } from "@/components/admin/manual-menu-item-form";
+import { MenuCategoryDangerActions } from "@/components/admin/menu-category-danger-actions";
 import { MenuItemAvailabilityToggle } from "@/components/admin/menu-item-availability-toggle";
 import { MenuItemDangerActions } from "@/components/admin/menu-item-danger-actions";
 import { MenuItemImageForm } from "@/components/admin/menu-item-image-form";
 import { MenuItemPreviewImage } from "@/components/admin/menu-item-preview-image";
-import { STARTER_MENU_TOTAL_ITEMS } from "@/lib/constants/starter-menu";
+import { STARTER_MENU, STARTER_MENU_TOTAL_ITEMS } from "@/lib/constants/starter-menu";
 import { prisma } from "@/lib/prisma";
 
 function hasCatalogImage(imageUrl: string | null) {
@@ -41,12 +42,19 @@ export default async function AdminMenuItemsPage() {
     },
   });
 
-  const totalItems = categories.reduce((sum, category) => sum + category.items.length, 0);
-  const itemsWithCatalogImages = categories.reduce(
+  const visibleCategories = categories.filter((category) => category.items.length > 0);
+  const emptyCategories = categories.filter((category) => category.items.length === 0);
+  const totalItems = visibleCategories.reduce((sum, category) => sum + category.items.length, 0);
+  const itemsWithCatalogImages = visibleCategories.reduce(
     (sum, category) => sum + category.items.filter((item) => hasCatalogImage(item.imageUrl)).length,
     0,
   );
+  const targetImageCount = STARTER_MENU.reduce(
+    (sum, category) => sum + category.items.filter((item) => hasCatalogImage(item.imageUrl ?? null)).length,
+    0,
+  );
   const remainingStarterItems = Math.max(STARTER_MENU_TOTAL_ITEMS - totalItems, 0);
+  const needsStarterSync = remainingStarterItems > 0 || itemsWithCatalogImages < targetImageCount;
 
   return (
     <div className="space-y-6 py-4">
@@ -86,8 +94,40 @@ export default async function AdminMenuItemsPage() {
         </div>
       </section>
 
-      {remainingStarterItems > 0 ? (
-        <InitializeStarterMenuButton currentCount={totalItems} targetCount={STARTER_MENU_TOTAL_ITEMS} />
+      {needsStarterSync ? (
+        <InitializeStarterMenuButton
+          currentCount={totalItems}
+          targetCount={STARTER_MENU_TOTAL_ITEMS}
+          currentImageCount={itemsWithCatalogImages}
+          targetImageCount={targetImageCount}
+        />
+      ) : null}
+
+      {emptyCategories.length > 0 ? (
+        <section className="surface p-6 sm:p-8">
+          <div className="flex flex-col gap-3 lg:flex-row lg:items-end lg:justify-between">
+            <div>
+              <p className="text-sm uppercase tracking-[0.2em] text-orange-600">Dọn dữ liệu thừa</p>
+              <h2 className="mt-2 text-2xl font-bold">Danh mục đang trống</h2>
+            </div>
+            <p className="text-sm text-stone-500">Những danh mục này không còn món nào và có thể xóa để web gọn lại.</p>
+          </div>
+          <div className="mt-6 grid gap-4 lg:grid-cols-2">
+            {emptyCategories.map((category) => (
+              <article key={category.id} className="rounded-3xl border border-stone-200 bg-white p-5">
+                <div className="flex items-start justify-between gap-4">
+                  <div>
+                    <h3 className="text-lg font-semibold text-stone-900">{category.name}</h3>
+                    <p className="mt-1 text-sm text-stone-500">0 món • sort {category.sortOrder}</p>
+                  </div>
+                </div>
+                <div className="mt-4">
+                  <MenuCategoryDangerActions categoryId={category.id} categoryName={category.name} />
+                </div>
+              </article>
+            ))}
+          </div>
+        </section>
       ) : null}
 
       <section className="surface p-6 sm:p-8">
@@ -99,13 +139,13 @@ export default async function AdminMenuItemsPage() {
           <p className="text-sm text-stone-500">Bấm vào từng danh mục để nhảy nhanh đến đúng nhóm món bên dưới.</p>
         </div>
 
-        {categories.length === 0 ? (
+        {visibleCategories.length === 0 ? (
           <div className="mt-6 rounded-3xl border border-dashed border-stone-300 bg-stone-50 p-6 text-sm text-stone-500">
             Chưa có danh mục nào trong production. Bạn có thể đồng bộ menu gốc ở phía trên hoặc tạo danh mục mới thủ công.
           </div>
         ) : (
           <div className="mt-6 grid gap-3 md:grid-cols-2 xl:grid-cols-3">
-            {categories.map((category) => (
+            {visibleCategories.map((category) => (
               <a
                 key={category.id}
                 href={`#category-${category.id}`}
@@ -119,10 +159,10 @@ export default async function AdminMenuItemsPage() {
         )}
       </section>
 
-      <ManualMenuItemForm categories={categories.map((category) => ({ id: category.id, name: category.name }))} />
+      <ManualMenuItemForm categories={visibleCategories.map((category) => ({ id: category.id, name: category.name }))} />
 
       <div className="space-y-8">
-        {categories.map((category) => (
+        {visibleCategories.map((category) => (
           <section key={category.id} id={`category-${category.id}`} className="surface overflow-hidden">
             <div className="flex flex-col gap-3 border-b border-stone-100 p-6 lg:flex-row lg:items-end lg:justify-between">
               <div>
@@ -132,57 +172,53 @@ export default async function AdminMenuItemsPage() {
               <p className="text-sm text-stone-500">{category.items.length} món trong danh mục này</p>
             </div>
 
-            {category.items.length === 0 ? (
-              <div className="p-6 text-sm text-stone-500">Danh mục này chưa có món nào.</div>
-            ) : (
-              <div className="divide-y divide-stone-100">
-                {category.items.map((item) => (
-                  <article key={item.id} className="grid gap-5 p-6 xl:grid-cols-[132px_minmax(0,1fr)_260px] xl:items-start">
-                    <div className="w-full max-w-[132px]">
-                      <MenuItemPreviewImage imageUrl={item.imageUrl} name={item.name} />
-                    </div>
+            <div className="divide-y divide-stone-100">
+              {category.items.map((item) => (
+                <article key={item.id} className="grid gap-5 p-6 xl:grid-cols-[132px_minmax(0,1fr)_260px] xl:items-start">
+                  <div className="w-full max-w-[132px]">
+                    <MenuItemPreviewImage imageUrl={item.imageUrl} name={item.name} />
+                  </div>
 
-                    <div className="space-y-3">
-                      <div className="flex flex-wrap items-start justify-between gap-3">
-                        <div className="max-w-3xl">
-                          <h3 className="text-xl font-semibold text-stone-900">{item.name}</h3>
-                          <p className="mt-2 text-sm leading-6 text-stone-500">
-                            {item.description ?? "Chưa có mô tả. Bạn có thể cập nhật mô tả sau nếu cần."}
-                          </p>
-                        </div>
-
-                        <div className="flex flex-wrap gap-2">
-                          <span
-                            className={`rounded-full px-3 py-1 text-xs font-medium ${
-                              item.isAvailable ? "bg-emerald-50 text-emerald-700" : "bg-amber-50 text-amber-700"
-                            }`}
-                          >
-                            {item.isAvailable ? "Đang phục vụ" : "Hết hàng"}
-                          </span>
-                          <span
-                            className={`rounded-full px-3 py-1 text-xs font-medium ${
-                              hasCatalogImage(item.imageUrl) ? "bg-sky-50 text-sky-700" : "bg-stone-100 text-stone-600"
-                            }`}
-                          >
-                            {hasCatalogImage(item.imageUrl) ? "Có ảnh sản phẩm" : "Ảnh tạm hoặc chưa có"}
-                          </span>
-                        </div>
+                  <div className="space-y-3">
+                    <div className="flex flex-wrap items-start justify-between gap-3">
+                      <div className="max-w-3xl">
+                        <h3 className="text-xl font-semibold text-stone-900">{item.name}</h3>
+                        <p className="mt-2 text-sm leading-6 text-stone-500">
+                          {item.description ?? "Chưa có mô tả. Bạn có thể cập nhật mô tả sau nếu cần."}
+                        </p>
                       </div>
 
-                      <p className="text-sm text-stone-500">
-                        Size: {item.variants.map((variant) => `${variant.name} (${variant.price.toLocaleString("vi-VN")}đ)`).join(" • ")}
-                      </p>
+                      <div className="flex flex-wrap gap-2">
+                        <span
+                          className={`rounded-full px-3 py-1 text-xs font-medium ${
+                            item.isAvailable ? "bg-emerald-50 text-emerald-700" : "bg-amber-50 text-amber-700"
+                          }`}
+                        >
+                          {item.isAvailable ? "Đang phục vụ" : "Hết hàng"}
+                        </span>
+                        <span
+                          className={`rounded-full px-3 py-1 text-xs font-medium ${
+                            hasCatalogImage(item.imageUrl) ? "bg-sky-50 text-sky-700" : "bg-stone-100 text-stone-600"
+                          }`}
+                        >
+                          {hasCatalogImage(item.imageUrl) ? "Có ảnh sản phẩm" : "Ảnh tạm hoặc chưa có"}
+                        </span>
+                      </div>
                     </div>
 
-                    <div className="grid gap-3">
-                      <MenuItemImageForm menuItemId={item.id} />
-                      <MenuItemAvailabilityToggle menuItemId={item.id} menuItemName={item.name} isAvailable={item.isAvailable} />
-                      <MenuItemDangerActions menuItemId={item.id} menuItemName={item.name} />
-                    </div>
-                  </article>
-                ))}
-              </div>
-            )}
+                    <p className="text-sm text-stone-500">
+                      Size: {item.variants.map((variant) => `${variant.name} (${variant.price.toLocaleString("vi-VN")}đ)`).join(" • ")}
+                    </p>
+                  </div>
+
+                  <div className="grid gap-3">
+                    <MenuItemImageForm menuItemId={item.id} />
+                    <MenuItemAvailabilityToggle menuItemId={item.id} menuItemName={item.name} isAvailable={item.isAvailable} />
+                    <MenuItemDangerActions menuItemId={item.id} menuItemName={item.name} />
+                  </div>
+                </article>
+              ))}
+            </div>
           </section>
         ))}
       </div>

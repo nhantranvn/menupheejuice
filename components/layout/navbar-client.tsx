@@ -39,7 +39,7 @@ export function NavbarClient() {
             >
               Giỏ hàng
             </Link>
-            {isReady && isLoggedIn ? (
+            {isReady && isLoggedIn && !isAdmin ? (
               <Link
                 href="/orders"
                 className="inline-flex items-center rounded-full px-4 py-2 text-sm font-medium text-stone-600 transition hover:bg-stone-100 hover:text-stone-950"
