@@ -1,13 +1,18 @@
-﻿import { NextResponse } from "next/server";
-import { auth } from "@/auth";
+import NextAuth from "next-auth";
+import { NextResponse } from "next/server";
+import authConfig from "@/auth.config";
+
+const { auth } = NextAuth(authConfig);
+const adminEmail = process.env.ADMIN_EMAIL?.toLowerCase();
 
 export default auth((req) => {
   const pathname = req.nextUrl.pathname;
-  const role = req.auth?.user?.role;
+  const email = req.auth?.user?.email?.toLowerCase();
   const isLoggedIn = Boolean(req.auth?.user);
+  const isAdmin = Boolean(adminEmail && email === adminEmail);
 
   if (pathname === "/admin/login") {
-    if (role === "ADMIN") {
+    if (isAdmin) {
       return NextResponse.redirect(new URL("/admin/orders", req.url));
     }
 
@@ -18,7 +23,7 @@ export default auth((req) => {
     return NextResponse.next();
   }
 
-  if (pathname.startsWith("/admin") && role !== "ADMIN") {
+  if (pathname.startsWith("/admin") && !isAdmin) {
     return NextResponse.redirect(new URL(isLoggedIn ? "/menu" : "/admin/login", req.url));
   }
 
