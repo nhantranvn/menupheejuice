@@ -5,6 +5,21 @@ import { CategorySection } from "@/components/menu/category-section";
 import { MenuCartBar } from "@/components/menu/menu-cart-bar";
 import { prisma } from "@/lib/prisma";
 
+function normalizeToppingName(name: string) {
+  return name
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/đ/g, "d")
+    .replace(/Đ/g, "D")
+    .toLowerCase()
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+function hasVietnameseMarks(name: string) {
+  return name.normalize("NFD").replace(/[\u0300-\u036f]/g, "") !== name || /[đĐ]/.test(name);
+}
+
 function EmptyState({ title, description }: { title: string; description: string }) {
   return (
     <section className="mx-auto flex w-full max-w-4xl flex-1 items-center py-10">
@@ -29,7 +44,7 @@ function EmptyState({ title, description }: { title: string; description: string
 
 export default async function MenuPage() {
   try {
-    const [categories, toppings] = await Promise.all([
+    const [categories, rawToppings] = await Promise.all([
       prisma.menuCategory.findMany({
         orderBy: [{ sortOrder: "asc" }, { name: "asc" }],
         include: {
@@ -53,6 +68,26 @@ export default async function MenuPage() {
         },
       }),
     ]);
+
+    const toppings = Array.from(
+      rawToppings
+        .reduce((map, topping) => {
+          const key = normalizeToppingName(topping.name);
+          const current = map.get(key);
+
+          if (!current) {
+            map.set(key, topping);
+            return map;
+          }
+
+          if (!hasVietnameseMarks(current.name) && hasVietnameseMarks(topping.name)) {
+            map.set(key, topping);
+          }
+
+          return map;
+        }, new Map<string, (typeof rawToppings)[number]>())
+        .values(),
+    );
 
     if (!categories.length) {
       return (

@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react";
 import { Plus } from "lucide-react";
+import { useCart } from "@/components/cart/cart-provider";
 import { MenuItemConfigurator } from "@/components/menu/menu-item-configurator";
 import { MENU_DESCRIPTION_BY_NAME } from "@/lib/menu-descriptions";
 import { resolveMenuItemImageUrl } from "@/lib/menu-item-images";
@@ -30,9 +31,11 @@ type Props = {
 
 export function MenuItemCard({ item, toppings }: Props) {
   const [imageFailed, setImageFailed] = useState(false);
+  const { items } = useCart();
   const baseVariant = item.variants.find((variant) => variant.sizeMl === 500) ?? item.variants[0];
   const displayDescription = MENU_DESCRIPTION_BY_NAME[item.name] ?? item.description ?? "Chọn topping và upsize 700ml khi mở món này.";
   const resolvedImageUrl = useMemo(() => resolveMenuItemImageUrl(item.imageUrl), [item.imageUrl]);
+  const selectedCount = items.reduce((sum, cartItem) => (cartItem.menuItemId === item.id ? sum + cartItem.quantity : sum), 0);
 
   return (
     <article className={`border-b border-stone-200 bg-white py-4 last:border-b-0 sm:rounded-[1.75rem] sm:border sm:px-4 sm:shadow-sm ${item.isAvailable ? "" : "opacity-90"}`}>
@@ -64,11 +67,15 @@ export function MenuItemCard({ item, toppings }: Props) {
                   <p className="mt-2 text-sm text-stone-400">{item.isAvailable ? "Chạm để thêm topping và upsize" : "Món này hiện đang hết hàng"}</p>
                 </div>
                 <span
-                  className={`inline-flex h-14 w-14 shrink-0 items-center justify-center rounded-full text-white shadow-lg transition ${
-                    item.isAvailable ? "bg-emerald-500 shadow-emerald-500/30" : "bg-stone-300 shadow-none"
+                  className={`inline-flex h-14 min-w-14 shrink-0 items-center justify-center rounded-full px-3 text-lg font-semibold transition ${
+                    selectedCount > 0
+                      ? "border-2 border-emerald-500 bg-white text-emerald-700 shadow-[0_10px_26px_-18px_rgba(16,185,129,0.6)]"
+                      : item.isAvailable
+                        ? "bg-emerald-500 text-white shadow-lg shadow-emerald-500/30"
+                        : "bg-stone-300 text-white shadow-none"
                   }`}
                 >
-                  <Plus className="h-7 w-7" />
+                  {selectedCount > 0 ? selectedCount : <Plus className="h-7 w-7" />}
                 </span>
               </div>
             </div>

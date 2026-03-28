@@ -30,20 +30,27 @@ type Props = {
   disabled?: boolean;
 };
 
-function buildCartItemId(menuItemId: string, variantId: string, toppingState: Record<string, number>) {
+function normalizeNoteForId(note: string) {
+  return note.trim().toLowerCase().replace(/\s+/g, " ");
+}
+
+function buildCartItemId(menuItemId: string, variantId: string, toppingState: Record<string, number>, note: string) {
   const toppingKey = Object.entries(toppingState)
     .filter(([, quantity]) => quantity > 0)
     .sort(([leftId], [rightId]) => leftId.localeCompare(rightId))
     .map(([toppingId, quantity]) => `${toppingId}:${quantity}`)
     .join("-");
+  const noteKey = encodeURIComponent(normalizeNoteForId(note));
 
-  return `${menuItemId}__${variantId}__${toppingKey}`;
+  return `${menuItemId}__${variantId}__${toppingKey}__${noteKey}`;
 }
 
 export function MenuItemConfigurator({ item, toppings, trigger, disabled = false }: Props) {
   const { addItem } = useCart();
   const [selectedVariantId, setSelectedVariantId] = useState(item.variants[0]?.id ?? "");
   const [toppingState, setToppingState] = useState<Record<string, number>>({});
+  const [selectedQuantity, setSelectedQuantity] = useState(1);
+  const [itemNote, setItemNote] = useState("");
   const [isAdded, setIsAdded] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [imageFailed, setImageFailed] = useState(false);
@@ -71,7 +78,8 @@ export function MenuItemConfigurator({ item, toppings, trigger, disabled = false
     })
     .filter((value): value is { id: string; name: string; price: number; quantity: number; lineTotal: number } => Boolean(value));
 
-  const totalPrice = (selectedVariant?.price ?? 0) + selectedToppings.reduce((sum, topping) => sum + topping.lineTotal, 0);
+  const unitPrice = (selectedVariant?.price ?? 0) + selectedToppings.reduce((sum, topping) => sum + topping.lineTotal, 0);
+  const totalPrice = unitPrice * selectedQuantity;
   const selectedToppingCount = selectedToppings.reduce((sum, topping) => sum + topping.quantity, 0);
 
   useEffect(() => {
@@ -95,13 +103,28 @@ export function MenuItemConfigurator({ item, toppings, trigger, disabled = false
     };
   }, [isOpen]);
 
+  const openConfigurator = () => {
+    if (disabled) {
+      return;
+    }
+
+    setSelectedVariantId(item.variants[0]?.id ?? "");
+    setToppingState({});
+    setSelectedQuantity(1);
+    setItemNote("");
+    setImageFailed(false);
+    setIsOpen(true);
+  };
+
   const addToCart = () => {
     if (!selectedVariant || disabled) {
       return;
     }
 
+    const trimmedNote = itemNote.trim();
+
     addItem({
-      cartItemId: buildCartItemId(item.id, selectedVariant.id, toppingState),
+      cartItemId: buildCartItemId(item.id, selectedVariant.id, toppingState, trimmedNote),
       menuItemId: item.id,
       name: item.name,
       imageUrl: resolvedImageUrl,
@@ -110,8 +133,9 @@ export function MenuItemConfigurator({ item, toppings, trigger, disabled = false
       sizeMl: selectedVariant.sizeMl,
       basePrice: selectedVariant.price,
       toppings: selectedToppings,
-      totalPrice,
-      note: "",
+      totalPrice: unitPrice,
+      note: trimmedNote,
+      quantity: selectedQuantity,
     });
 
     setIsAdded(true);
@@ -124,11 +148,7 @@ export function MenuItemConfigurator({ item, toppings, trigger, disabled = false
       <button
         type="button"
         disabled={disabled}
-        onClick={() => {
-          if (!disabled) {
-            setIsOpen(true);
-          }
-        }}
+        onClick={openConfigurator}
         className={`${trigger ? "block w-full text-left" : "inline-flex items-center gap-2 rounded-full bg-emerald-600 px-4 py-2 text-sm font-semibold text-white"} ${disabled ? "cursor-not-allowed" : ""}`}
       >
         {trigger ?? (
@@ -146,7 +166,7 @@ export function MenuItemConfigurator({ item, toppings, trigger, disabled = false
             <div className="flex items-center justify-between border-b border-stone-200 px-5 py-4">
               <div className="min-w-0">
                 <h3 className="truncate text-2xl font-semibold text-stone-950">{item.name}</h3>
-                <p className="mt-1 text-sm text-stone-500">{disabled ? "Món này hiện đang hết hàng" : "Chọn topping và upsize cho món uống của bạn"}</p>
+                <p className="mt-1 text-sm text-stone-500">{disabled ? "Món này hiện đang hết hàng" : "Chọn topping, lưu ý và số lượng cho món uống của bạn"}</p>
               </div>
               <button
                 type="button"
@@ -157,12 +177,12 @@ export function MenuItemConfigurator({ item, toppings, trigger, disabled = false
               </button>
             </div>
 
-            <div className="flex-1 overflow-y-auto px-5 pb-28 pt-5 md:px-6">
+            <div className="flex-1 overflow-y-auto px-5 pb-40 pt-5 md:px-6">
               <div className="overflow-hidden rounded-[1.75rem] bg-stone-100">
                 {resolvedImageUrl && !imageFailed ? (
-                  <img src={resolvedImageUrl} alt={item.name} className="aspect-square w-full object-cover object-center" onError={() => setImageFailed(true)} />
+                  <img src={resolvedImageUrl} alt={item.name} className="h-40 w-full object-cover object-center sm:h-48" onError={() => setImageFailed(true)} />
                 ) : (
-                  <div className="flex aspect-square w-full items-center justify-center text-center">
+                  <div className="flex h-40 w-full items-center justify-center text-center sm:h-48">
                     <div>
                       <p className="text-xs uppercase tracking-[0.24em] text-stone-500">Món uống</p>
                       <h4 className="mt-3 px-4 text-3xl font-semibold">{item.name}</h4>
@@ -229,9 +249,11 @@ export function MenuItemConfigurator({ item, toppings, trigger, disabled = false
                 </section>
 
                 <section className="space-y-4">
-                  <div>
-                    <p className="text-[1.75rem] font-semibold leading-tight text-stone-950">Up size to uống đã khát</p>
-                    <p className="mt-1 text-sm text-stone-500">Không bắt buộc, tối đa 1 lựa chọn</p>
+                  <div className="flex items-center justify-between gap-3">
+                    <div>
+                      <p className="text-[1.75rem] font-semibold leading-tight text-stone-950">Up size to uống đã khát</p>
+                    </div>
+                    <span className="rounded-full bg-stone-100 px-3 py-2 text-sm font-medium text-stone-500">Không bắt buộc, tối đa 1</span>
                   </div>
 
                   <div className="space-y-3 rounded-[1.75rem] border border-stone-200 bg-white p-3">
@@ -263,14 +285,48 @@ export function MenuItemConfigurator({ item, toppings, trigger, disabled = false
                     ) : null}
                   </div>
                 </section>
+
+                <section className="space-y-3">
+                  <div className="flex items-center justify-between gap-3">
+                    <p className="text-[1.55rem] font-semibold leading-tight text-stone-950">Thêm lưu ý cho quán</p>
+                    <span className="rounded-full bg-stone-100 px-3 py-2 text-sm font-medium text-stone-500">Không bắt buộc</span>
+                  </div>
+                  <textarea
+                    rows={4}
+                    maxLength={180}
+                    className="input-field resize-none rounded-[1.75rem]"
+                    placeholder="Việc thực hiện yêu cầu còn tùy thuộc vào khả năng của quán. Ví dụ: ít đá, ít ngọt, để riêng ống hút..."
+                    value={itemNote}
+                    onChange={(event) => setItemNote(event.target.value)}
+                  />
+                </section>
               </div>
             </div>
 
             <div className="absolute inset-x-0 bottom-0 border-t border-stone-200 bg-white/95 px-5 py-4 backdrop-blur md:px-6">
+              <div className="mb-3 flex items-center justify-center gap-4">
+                <button
+                  type="button"
+                  disabled={disabled}
+                  className={`flex h-12 w-12 items-center justify-center rounded-full border text-stone-700 transition ${selectedQuantity > 1 ? "border-emerald-200 bg-emerald-50" : "border-stone-200 bg-stone-50"} ${disabled ? "cursor-not-allowed opacity-50" : ""}`}
+                  onClick={() => setSelectedQuantity((current) => Math.max(current - 1, 1))}
+                >
+                  <Minus className="h-5 w-5" />
+                </button>
+                <span className="min-w-12 text-center text-2xl font-semibold text-stone-950">{selectedQuantity}</span>
+                <button
+                  type="button"
+                  disabled={disabled}
+                  className={`flex h-12 w-12 items-center justify-center rounded-full border border-emerald-200 bg-emerald-50 text-emerald-700 transition hover:bg-emerald-100 ${disabled ? "cursor-not-allowed opacity-50" : ""}`}
+                  onClick={() => setSelectedQuantity((current) => Math.min(current + 1, 20))}
+                >
+                  <Plus className="h-5 w-5" />
+                </button>
+              </div>
               <button
                 type="button"
                 disabled={disabled}
-                className={`w-full rounded-[1.4rem] px-6 py-4 text-xl font-semibold text-white transition ${disabled ? "bg-stone-300 shadow-none cursor-not-allowed" : "bg-emerald-500 shadow-lg shadow-emerald-500/30 hover:bg-emerald-600"}`}
+                className={`w-full rounded-[1.4rem] px-6 py-4 text-xl font-semibold text-white transition ${disabled ? "cursor-not-allowed bg-stone-300 shadow-none" : "bg-emerald-500 shadow-lg shadow-emerald-500/30 hover:bg-emerald-600"}`}
                 onClick={addToCart}
               >
                 {disabled ? "Món này hiện đang hết hàng" : isAdded ? "Đã thêm vào giỏ" : `Thêm vào giỏ hàng - ${formatCurrency(totalPrice)}`}
