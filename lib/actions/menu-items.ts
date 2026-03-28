@@ -4,6 +4,7 @@ import { mkdir, writeFile } from "fs/promises";
 import path from "path";
 import { revalidatePath } from "next/cache";
 import { auth } from "@/auth";
+import { buildStarterImageUrl, STARTER_MENU, STARTER_TOPPINGS, STARTER_VARIANTS } from "@/lib/constants/starter-menu";
 import { prisma } from "@/lib/prisma";
 import { buildMenuItemImageStoragePaths } from "@/lib/uploads";
 import {
@@ -19,6 +20,120 @@ function revalidateMenuPaths() {
   revalidatePath("/");
   revalidatePath("/menu");
   revalidatePath("/admin/menu-items");
+}
+export async function initializeStarterMenuAction() {
+  const session = await auth();
+
+  if (session?.user?.role !== "ADMIN") {
+    return { ok: false, error: "Ban khong co quyen khoi tao menu mac dinh." };
+  }
+
+  const existingItems = await prisma.menuItem.count();
+
+  if (existingItems > 0) {
+    return {
+      ok: false,
+      error: "Menu hien da co du lieu. Chi khoi tao menu mac dinh khi database con trong.",
+    };
+  }
+
+  const result = await prisma.$transaction(async (tx) => {
+    let createdCategories = 0;
+    let createdItems = 0;
+    let createdToppings = 0;
+
+    for (const topping of STARTER_TOPPINGS) {
+      const existingTopping = await tx.topping.findUnique({
+        where: { name: topping.name },
+        select: { id: true },
+      });
+
+      if (!existingTopping) {
+        await tx.topping.create({ data: topping });
+        createdToppings += 1;
+      }
+    }
+
+    for (let categoryIndex = 0; categoryIndex < STARTER_MENU.length; categoryIndex += 1) {
+      const categorySeed = STARTER_MENU[categoryIndex];
+
+      let category = await tx.menuCategory.findUnique({
+        where: { name: categorySeed.name },
+        select: { id: true },
+      });
+
+      if (!category) {
+        category = await tx.menuCategory.create({
+          data: {
+            name: categorySeed.name,
+            sortOrder: categoryIndex + 1,
+          },
+          select: { id: true },
+        });
+        createdCategories += 1;
+      }
+
+      for (let itemIndex = 0; itemIndex < categorySeed.items.length; itemIndex += 1) {
+        const itemName = categorySeed.items[itemIndex];
+        const existingItem = await tx.menuItem.findUnique({
+          where: {
+            categoryId_name: {
+              categoryId: category.id,
+              name: itemName,
+            },
+          },
+          select: { id: true },
+        });
+
+        if (existingItem) {
+          continue;
+        }
+
+        const item = await tx.menuItem.create({
+          data: {
+            categoryId: category.id,
+            name: itemName,
+            description: `Mon ${itemName.toLowerCase()} voi 2 lua chon dung tich 500ml va 700ml.`,
+            imageUrl: buildStarterImageUrl(itemName),
+            isAvailable: true,
+            sortOrder: itemIndex + 1,
+          },
+          select: { id: true },
+        });
+
+        for (const variant of STARTER_VARIANTS) {
+          await tx.menuItemVariant.create({
+            data: {
+              menuItemId: item.id,
+              name: variant.name,
+              sizeMl: variant.sizeMl,
+              price: variant.price,
+              sortOrder: variant.sortOrder,
+            },
+          });
+        }
+
+        createdItems += 1;
+      }
+    }
+
+    return { createdCategories, createdItems, createdToppings };
+  }).catch((error) => {
+    return {
+      error: error instanceof Error ? error.message : "Khong the khoi tao menu mac dinh luc nay.",
+    };
+  });
+
+  if ("error" in result) {
+    return { ok: false, error: result.error };
+  }
+
+  revalidateMenuPaths();
+
+  return {
+    ok: true,
+    message: `Da khoi tao ${result.createdCategories} danh muc, ${result.createdItems} mon va ${result.createdToppings} topping mac dinh.`,
+  };
 }
 
 export async function updateMenuItemImageAction(formData: FormData) {
@@ -272,3 +387,4 @@ export async function createManualMenuItemAction(formData: FormData) {
     message: `Đã thêm món ${result.itemName} vào danh mục ${result.categoryName}.`,
   };
 }
+

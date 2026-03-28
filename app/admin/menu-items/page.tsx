@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { auth } from "@/auth";
+import { InitializeStarterMenuButton } from "@/components/admin/initialize-starter-menu-button";
 import { ManualMenuItemForm } from "@/components/admin/manual-menu-item-form";
 import { MenuItemAvailabilityToggle } from "@/components/admin/menu-item-availability-toggle";
 import { MenuItemDangerActions } from "@/components/admin/menu-item-danger-actions";
@@ -77,6 +78,8 @@ export default async function AdminMenuItemsPage() {
         </div>
       </section>
 
+      {totalItems === 0 ? <InitializeStarterMenuButton /> : null}
+
       <ManualMenuItemForm categories={categories.map((category) => ({ id: category.id, name: category.name }))} />
 
       <div className="space-y-8">
@@ -138,3 +141,4 @@ export default async function AdminMenuItemsPage() {
     </div>
   );
 }
+
