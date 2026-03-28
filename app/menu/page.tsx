@@ -1,0 +1,73 @@
+﻿import { redirect } from "next/navigation";
+import { CategorySection } from "@/components/menu/category-section";
+import { MenuCartBar } from "@/components/menu/menu-cart-bar";
+import { prisma } from "@/lib/prisma";
+
+export default async function MenuPage() {
+  const [categories, toppings] = await Promise.all([
+    prisma.menuCategory.findMany({
+      orderBy: [{ sortOrder: "asc" }, { name: "asc" }],
+      include: {
+        items: {
+          orderBy: [{ sortOrder: "asc" }, { name: "asc" }],
+          include: {
+            variants: {
+              orderBy: [{ sortOrder: "asc" }, { sizeMl: "asc" }],
+            },
+          },
+        },
+      },
+    }),
+    prisma.topping.findMany({
+      where: { isActive: true },
+      orderBy: [{ sortOrder: "asc" }, { name: "asc" }],
+      select: {
+        id: true,
+        name: true,
+        price: true,
+      },
+    }),
+  ]);
+
+  if (!categories.length) {
+    redirect("/");
+  }
+
+  return (
+    <>
+      <div className="space-y-8 py-4 pb-28">
+        <section className="rounded-[2rem] border border-stone-200 bg-white px-4 py-5 shadow-[0_16px_40px_-28px_rgba(28,25,23,0.35)] sm:px-6 sm:py-6">
+          <p className="text-sm uppercase tracking-[0.2em] text-orange-600">PHEE JUICE MENU</p>
+          <div className="mt-3 flex flex-col gap-4">
+            <div>
+              <h1 className="text-3xl font-bold text-stone-950 sm:text-4xl">Chạm vào món để chọn topping và upsize 700ml</h1>
+              <p className="mt-3 max-w-3xl text-stone-600">
+                Khách có thể xem menu và đặt trực tiếp không cần đăng nhập. Món nào hết hàng vẫn sẽ hiện trong menu để dễ theo dõi,
+                nhưng sẽ không thể thêm vào giỏ cho đến khi quán mở bán lại.
+              </p>
+            </div>
+            <div className="flex gap-3 overflow-x-auto pb-1">
+              {categories.map((category) => (
+                <a
+                  key={category.id}
+                  href={`#${category.id}`}
+                  className="shrink-0 rounded-full border border-stone-300 bg-white px-5 py-3 text-sm font-semibold text-stone-700 transition hover:border-orange-300 hover:text-orange-700"
+                >
+                  {category.name}
+                </a>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <div className="space-y-10">
+          {categories.map((category) => (
+            <CategorySection key={category.id} category={category} toppings={toppings} />
+          ))}
+        </div>
+      </div>
+
+      <MenuCartBar />
+    </>
+  );
+}
