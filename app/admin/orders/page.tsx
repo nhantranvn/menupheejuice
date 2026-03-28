@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { auth } from "@/auth";
+import { AdminOrderNotifications } from "@/components/admin/admin-order-notifications";
 import { OrderCard } from "@/components/admin/order-card";
 import { prisma } from "@/lib/prisma";
 
@@ -46,6 +47,18 @@ export default async function AdminOrdersPage() {
     },
   });
 
+  const latestOrder = orders[0]
+    ? {
+        id: orders[0].id,
+        orderCode: orders[0].orderCode,
+        customerName: orders[0].customerName,
+        totalAmount: orders[0].totalAmount,
+        createdAt: orders[0].createdAt.toISOString(),
+      }
+    : null;
+
+  const newOrderCount = orders.filter((order) => order.status === "NEW").length;
+
   return (
     <div className="space-y-6 py-4">
       <section className="surface p-6 sm:p-8">
@@ -68,6 +81,8 @@ export default async function AdminOrdersPage() {
           </div>
         </div>
       </section>
+
+      <AdminOrderNotifications initialLatestOrder={latestOrder} initialNewOrderCount={newOrderCount} />
 
       {orders.length === 0 ? (
         <section className="surface p-8 text-center">

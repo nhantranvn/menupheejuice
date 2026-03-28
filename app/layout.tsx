@@ -1,5 +1,6 @@
 ﻿import type { Metadata } from "next";
 import "./globals.css";
+import { FloatingPhoneButton } from "@/components/layout/floating-phone-button";
 import { NavbarClient } from "@/components/layout/navbar-client";
 import { AppProviders } from "@/components/providers/app-providers";
 
@@ -24,6 +25,7 @@ export default function RootLayout({
               <main className="mx-auto flex min-h-[calc(100vh-80px)] w-full max-w-7xl flex-col px-4 pb-12 pt-6 sm:px-6 lg:px-8">
                 {children}
               </main>
+              <FloatingPhoneButton />
             </div>
           </div>
         </AppProviders>
