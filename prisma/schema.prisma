@@ -28,17 +28,18 @@ enum MenuImportStatus {
 }
 
 model User {
-  id             String          @id @default(cuid())
-  name           String?
-  email          String?         @unique
-  image          String?
-  role           UserRole        @default(CUSTOMER)
-  accounts       Account[]
-  sessions       Session[]
-  orders         Order[]
-  menuImportJobs MenuImportJob[]
-  createdAt      DateTime        @default(now())
-  updatedAt      DateTime        @updatedAt
+  id                     String                  @id @default(cuid())
+  name                   String?
+  email                  String?                 @unique
+  image                  String?
+  role                   UserRole                @default(CUSTOMER)
+  accounts               Account[]
+  sessions               Session[]
+  orders                 Order[]
+  menuImportJobs         MenuImportJob[]
+  adminPushSubscriptions AdminPushSubscription[]
+  createdAt              DateTime                @default(now())
+  updatedAt              DateTime                @updatedAt
 }
 
 model Account {
@@ -188,4 +189,17 @@ model MenuImportJob {
   errorMessage     String?
   createdAt        DateTime         @default(now())
   updatedAt        DateTime         @updatedAt
+}
+
+model AdminPushSubscription {
+  id          String   @id @default(cuid())
+  userId      String
+  token       String   @unique
+  userAgent   String?
+  lastSeenAt  DateTime @default(now())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
 }

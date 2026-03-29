@@ -1,6 +1,7 @@
 ﻿"use server";
 
 import { auth } from "@/auth";
+import { sendNewOrderAdminPush } from "@/lib/push-notifications";
 import { prisma } from "@/lib/prisma";
 import { createOrderSchema } from "@/lib/validations/order";
 
@@ -162,8 +163,23 @@ export async function createOrderAction(input: CreateOrderInput) {
     select: {
       id: true,
       orderCode: true,
+      customerName: true,
+      totalAmount: true,
+      createdAt: true,
     },
   });
+
+  try {
+    await sendNewOrderAdminPush({
+      orderId: order.id,
+      orderCode: order.orderCode,
+      customerName: order.customerName,
+      totalAmount: order.totalAmount,
+      createdAt: order.createdAt,
+    });
+  } catch (error) {
+    console.error("Failed to send admin push notification for new order", error);
+  }
 
   return { ok: true, orderId: order.id, orderCode: order.orderCode };
 }

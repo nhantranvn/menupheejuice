@@ -3,7 +3,16 @@ import { PrismaAdapter } from "@auth/prisma-adapter";
 import authConfig from "@/auth.config";
 import { prisma } from "@/lib/prisma";
 
-const adminEmail = process.env.ADMIN_EMAIL?.toLowerCase();
+function getAdminEmails() {
+  return new Set(
+    (process.env.ADMIN_EMAIL ?? "")
+      .split(/[,\s;]+/)
+      .map((email) => email.trim().toLowerCase())
+      .filter(Boolean),
+  );
+}
+
+const adminEmails = getAdminEmails();
 const isBuildPhase = process.env.NEXT_PHASE === "phase-production-build";
 const shouldUseDatabase = !isBuildPhase && Boolean(process.env.DATABASE_URL);
 
@@ -23,7 +32,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
         return false;
       }
 
-      if (adminEmail && user.email.toLowerCase() === adminEmail) {
+      if (adminEmails.has(user.email.toLowerCase())) {
         await prisma.user.upsert({
           where: { email: user.email.toLowerCase() },
           update: {

@@ -3,7 +3,16 @@ import Google from "next-auth/providers/google";
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import { prisma } from "@/lib/prisma";
 
-const adminEmail = process.env.ADMIN_EMAIL?.toLowerCase();
+function getAdminEmails() {
+  return new Set(
+    (process.env.ADMIN_EMAIL ?? "")
+      .split(/[,\s;]+/)
+      .map((email) => email.trim().toLowerCase())
+      .filter(Boolean),
+  );
+}
+
+const adminEmails = getAdminEmails();
 
 export const authConfig: NextAuthConfig = {
   adapter: PrismaAdapter(prisma),
@@ -26,7 +35,7 @@ export const authConfig: NextAuthConfig = {
         return false;
       }
 
-      if (adminEmail && user.email.toLowerCase() === adminEmail) {
+      if (adminEmails.has(user.email.toLowerCase())) {
         await prisma.user.upsert({
           where: { email: user.email.toLowerCase() },
           update: {
