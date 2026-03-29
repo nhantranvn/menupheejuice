@@ -873,7 +873,7 @@ export const STARTER_MENU = [
       {
         "name": "N\u01b0\u1edbc \u00c9p C\u00f3c - T\u00e1o Si\u00eau Hot",
         "description": "M\u00f3n n\u01b0\u1edbc \u00e9p c\u00f3c - t\u00e1o si\u00eau hot v\u1edbi 2 l\u1ef1a ch\u1ecdn dung t\u00edch 500ml v\u00e0 700ml, c\u00f3 th\u1ec3 th\u00eam topping theo s\u1edf th\u00edch.",
-        "imageUrl": "https://placehold.co/800x600/f5f5f4/1c1917?text=N%C6%B0%E1%BB%9Bc%20%C3%89p%20C%C3%B3c%20-%20T%C3%A1o%20Si%C3%AAu%20Hot",
+        "imageUrl": "/uploads/menu-items/1774707311540-85a0eeba-541d-4412-9ab3-6e0133a7d035-n-c-p-c-c-t-o-si-u-h-t.webp",
         "isAvailable": true,
         "sortOrder": 2,
         "variants": [
@@ -894,7 +894,7 @@ export const STARTER_MENU = [
       {
         "name": "N\u01b0\u1edbc \u00c9p D\u01b0a H\u1ea5u",
         "description": "M\u00f3n n\u01b0\u1edbc \u00e9p d\u01b0a h\u1ea5u v\u1edbi 2 l\u1ef1a ch\u1ecdn dung t\u00edch 500ml v\u00e0 700ml, c\u00f3 th\u1ec3 th\u00eam topping theo s\u1edf th\u00edch.",
-        "imageUrl": "https://placehold.co/800x600/f5f5f4/1c1917?text=N%C6%B0%E1%BB%9Bc%20%C3%89p%20D%C6%B0a%20H%E1%BA%A5u",
+        "imageUrl": "/uploads/menu-items/1774707319753-819bdb01-1326-4e09-8c02-05c37e1e515a-n-c-p-d-a-h-u-t-ng-topping-nha-am-.webp",
         "isAvailable": true,
         "sortOrder": 3,
         "variants": [
@@ -915,7 +915,7 @@ export const STARTER_MENU = [
       {
         "name": "N\u01b0\u1edbc \u00c9p C\u00f3c Mix \u1ed4i",
         "description": "M\u00f3n n\u01b0\u1edbc \u00e9p c\u00f3c mix \u1ed5i v\u1edbi 2 l\u1ef1a ch\u1ecdn dung t\u00edch 500ml v\u00e0 700ml, c\u00f3 th\u1ec3 th\u00eam topping theo s\u1edf th\u00edch.",
-        "imageUrl": "https://placehold.co/800x600/f5f5f4/1c1917?text=N%C6%B0%E1%BB%9Bc%20%C3%89p%20C%C3%B3c%20Mix%20%E1%BB%94i",
+        "imageUrl": "/uploads/menu-items/1774707326161-cb1a91ae-3cf4-4623-a180-9910a7c85159-n-c-p-c-c-i.webp",
         "isAvailable": true,
         "sortOrder": 4,
         "variants": [
@@ -936,7 +936,7 @@ export const STARTER_MENU = [
       {
         "name": "N\u01b0\u1edbc \u00c9p \u1ed4i - Chanh Leo",
         "description": "M\u00f3n n\u01b0\u1edbc \u00e9p \u1ed5i - chanh leo v\u1edbi 2 l\u1ef1a ch\u1ecdn dung t\u00edch 500ml v\u00e0 700ml, c\u00f3 th\u1ec3 th\u00eam topping theo s\u1edf th\u00edch.",
-        "imageUrl": "https://placehold.co/800x600/f5f5f4/1c1917?text=N%C6%B0%E1%BB%9Bc%20%C3%89p%20%E1%BB%94i%20-%20Chanh%20Leo",
+        "imageUrl": "/uploads/menu-items/1774707337538-43732b4a-aa7f-469f-be09-1b0a9eac4ac3-n-c-p-i-chanh-leo.webp",
         "isAvailable": true,
         "sortOrder": 5,
         "variants": [
@@ -957,7 +957,7 @@ export const STARTER_MENU = [
       {
         "name": "N\u01b0\u1edbc \u00c9p C\u00f3c - D\u1ee9a",
         "description": "M\u00f3n n\u01b0\u1edbc \u00e9p c\u00f3c - d\u1ee9a v\u1edbi 2 l\u1ef1a ch\u1ecdn dung t\u00edch 500ml v\u00e0 700ml, c\u00f3 th\u1ec3 th\u00eam topping theo s\u1edf th\u00edch.",
-        "imageUrl": "https://placehold.co/800x600/f5f5f4/1c1917?text=N%C6%B0%E1%BB%9Bc%20%C3%89p%20C%C3%B3c%20-%20D%E1%BB%A9a",
+        "imageUrl": "/uploads/menu-items/1774707344674-6776efce-192f-41d4-a4c9-968dc164b62e-n-c-p-c-c-d-a.webp",
         "isAvailable": true,
         "sortOrder": 6,
         "variants": [
@@ -978,7 +978,7 @@ export const STARTER_MENU = [
       {
         "name": "N\u01b0\u1edbc \u00c9p C\u1ea7n T\u00e2y - T\u00e1o",
         "description": "M\u00f3n n\u01b0\u1edbc \u00e9p c\u1ea7n t\u00e2y - t\u00e1o v\u1edbi 2 l\u1ef1a ch\u1ecdn dung t\u00edch 500ml v\u00e0 700ml, c\u00f3 th\u1ec3 th\u00eam topping theo s\u1edf th\u00edch.",
-        "imageUrl": "https://placehold.co/800x600/f5f5f4/1c1917?text=N%C6%B0%E1%BB%9Bc%20%C3%89p%20C%E1%BA%A7n%20T%C3%A2y%20-%20T%C3%A1o",
+        "imageUrl": "/uploads/menu-items/1774707351308-93f864a0-b4fd-413a-aa85-146105ec87c0-n-c-p-c-n-t-y-t-o.webp",
         "isAvailable": true,
         "sortOrder": 7,
         "variants": [
@@ -999,7 +999,7 @@ export const STARTER_MENU = [
       {
         "name": "N\u01b0\u1edbc \u00c9p C\u1ea7n T\u00e2y - D\u1ee9a - \u1ed4i",
         "description": "M\u00f3n n\u01b0\u1edbc \u00e9p c\u1ea7n t\u00e2y - d\u1ee9a - \u1ed5i v\u1edbi 2 l\u1ef1a ch\u1ecdn dung t\u00edch 500ml v\u00e0 700ml, c\u00f3 th\u1ec3 th\u00eam topping theo s\u1edf th\u00edch.",
-        "imageUrl": "https://placehold.co/800x600/f5f5f4/1c1917?text=N%C6%B0%E1%BB%9Bc%20%C3%89p%20C%E1%BA%A7n%20T%C3%A2y%20-%20D%E1%BB%A9a%20-%20%E1%BB%94i",
+        "imageUrl": "/uploads/menu-items/1774707359152-4f95a6fe-2762-41aa-8d6a-be6645fef875-n-c-p-c-n-t-y-d-a-i.webp",
         "isAvailable": true,
         "sortOrder": 8,
         "variants": [
@@ -1020,7 +1020,7 @@ export const STARTER_MENU = [
       {
         "name": "N\u01b0\u1edbc \u00c9p C\u1ea7n T\u00e2y - T\u00e1o - C\u00e0 R\u1ed1t",
         "description": "M\u00f3n n\u01b0\u1edbc \u00e9p c\u1ea7n t\u00e2y - t\u00e1o - c\u00e0 r\u1ed1t v\u1edbi 2 l\u1ef1a ch\u1ecdn dung t\u00edch 500ml v\u00e0 700ml, c\u00f3 th\u1ec3 th\u00eam topping theo s\u1edf th\u00edch.",
-        "imageUrl": "https://placehold.co/800x600/f5f5f4/1c1917?text=N%C6%B0%E1%BB%9Bc%20%C3%89p%20C%E1%BA%A7n%20T%C3%A2y%20-%20T%C3%A1o%20-%20C%C3%A0%20R%E1%BB%91t",
+        "imageUrl": "/uploads/menu-items/1774707365570-d74f0f8f-80e2-43f1-99ad-4cef00ec256f-n-c-p-c-n-t-y-t-o-c-r-t.webp",
         "isAvailable": true,
         "sortOrder": 9,
         "variants": [
@@ -1041,7 +1041,7 @@ export const STARTER_MENU = [
       {
         "name": "N\u01b0\u1edbc \u00c9p C\u1ea7n T\u00e2y - Cam - D\u1ee9a",
         "description": "M\u00f3n n\u01b0\u1edbc \u00e9p c\u1ea7n t\u00e2y - cam - d\u1ee9a v\u1edbi 2 l\u1ef1a ch\u1ecdn dung t\u00edch 500ml v\u00e0 700ml, c\u00f3 th\u1ec3 th\u00eam topping theo s\u1edf th\u00edch.",
-        "imageUrl": "https://placehold.co/800x600/f5f5f4/1c1917?text=N%C6%B0%E1%BB%9Bc%20%C3%89p%20C%E1%BA%A7n%20T%C3%A2y%20-%20Cam%20-%20D%E1%BB%A9a",
+        "imageUrl": "/uploads/menu-items/1774707371717-11e2fb81-0204-49af-abaf-31fac177c301-n-c-p-c-n-t-y-cam-d-a.webp",
         "isAvailable": true,
         "sortOrder": 10,
         "variants": [
@@ -1062,7 +1062,7 @@ export const STARTER_MENU = [
       {
         "name": "N\u01b0\u1edbc \u00c9p C\u00f3c - \u1ed4i",
         "description": "M\u00f3n n\u01b0\u1edbc \u00e9p c\u00f3c - \u1ed5i v\u1edbi 2 l\u1ef1a ch\u1ecdn dung t\u00edch 500ml v\u00e0 700ml, c\u00f3 th\u1ec3 th\u00eam topping theo s\u1edf th\u00edch.",
-        "imageUrl": "https://placehold.co/800x600/f5f5f4/1c1917?text=N%C6%B0%E1%BB%9Bc%20%C3%89p%20C%C3%B3c%20-%20%E1%BB%94i",
+        "imageUrl": "/uploads/menu-items/1774707443994-81bd6a56-02d0-4ac0-95ba-d597300a7e65-n-c-p-c-c-i.webp",
         "isAvailable": true,
         "sortOrder": 11,
         "variants": [
@@ -1083,7 +1083,7 @@ export const STARTER_MENU = [
       {
         "name": "N\u01b0\u1edbc \u00c9p Cam Mix C\u00e0 R\u1ed1t",
         "description": "M\u00f3n n\u01b0\u1edbc \u00e9p cam mix c\u00e0 r\u1ed1t v\u1edbi 2 l\u1ef1a ch\u1ecdn dung t\u00edch 500ml v\u00e0 700ml, c\u00f3 th\u1ec3 th\u00eam topping theo s\u1edf th\u00edch.",
-        "imageUrl": "https://placehold.co/800x600/f5f5f4/1c1917?text=N%C6%B0%E1%BB%9Bc%20%C3%89p%20Cam%20Mix%20C%C3%A0%20R%E1%BB%91t",
+        "imageUrl": "/uploads/menu-items/1774707389084-201e48ad-1cf5-456f-88a9-775fe556d4ed-n-c-p-cam-mix-c-r-t.webp",
         "isAvailable": true,
         "sortOrder": 12,
         "variants": [
@@ -1104,7 +1104,7 @@ export const STARTER_MENU = [
       {
         "name": "N\u01b0\u1edbc \u00c9p Cam Mix T\u00e1o",
         "description": "M\u00f3n n\u01b0\u1edbc \u00e9p cam mix t\u00e1o v\u1edbi 2 l\u1ef1a ch\u1ecdn dung t\u00edch 500ml v\u00e0 700ml, c\u00f3 th\u1ec3 th\u00eam topping theo s\u1edf th\u00edch.",
-        "imageUrl": "https://placehold.co/800x600/f5f5f4/1c1917?text=N%C6%B0%E1%BB%9Bc%20%C3%89p%20Cam%20Mix%20T%C3%A1o",
+        "imageUrl": "/uploads/menu-items/1774707395008-a5bbb46d-3e66-4616-b08a-a3c9b5acc80e-n-c-p-cam-mix-t-o.webp",
         "isAvailable": true,
         "sortOrder": 13,
         "variants": [
@@ -1125,7 +1125,7 @@ export const STARTER_MENU = [
       {
         "name": "N\u01b0\u1edbc \u00c9p D\u1ee9a Mix T\u00e1o",
         "description": "M\u00f3n n\u01b0\u1edbc \u00e9p d\u1ee9a mix t\u00e1o v\u1edbi 2 l\u1ef1a ch\u1ecdn dung t\u00edch 500ml v\u00e0 700ml, c\u00f3 th\u1ec3 th\u00eam topping theo s\u1edf th\u00edch.",
-        "imageUrl": "https://placehold.co/800x600/f5f5f4/1c1917?text=N%C6%B0%E1%BB%9Bc%20%C3%89p%20D%E1%BB%A9a%20Mix%20T%C3%A1o",
+        "imageUrl": "/uploads/menu-items/1774707399774-db0d4529-d935-4e47-98e4-bd8e2f235723-n-c-p-d-a-mix-t-o.webp",
         "isAvailable": true,
         "sortOrder": 14,
         "variants": [
@@ -1146,7 +1146,7 @@ export const STARTER_MENU = [
       {
         "name": "N\u01b0\u1edbc \u00c9p D\u1ee9a Mix C\u00e0 R\u1ed1t",
         "description": "M\u00f3n n\u01b0\u1edbc \u00e9p d\u1ee9a mix c\u00e0 r\u1ed1t v\u1edbi 2 l\u1ef1a ch\u1ecdn dung t\u00edch 500ml v\u00e0 700ml, c\u00f3 th\u1ec3 th\u00eam topping theo s\u1edf th\u00edch.",
-        "imageUrl": "https://placehold.co/800x600/f5f5f4/1c1917?text=N%C6%B0%E1%BB%9Bc%20%C3%89p%20D%E1%BB%A9a%20Mix%20C%C3%A0%20R%E1%BB%91t",
+        "imageUrl": "/uploads/menu-items/1774707404538-3ef74b05-8bd3-4144-b027-53860f822f36-n-c-p-d-a-mix-c-r-t.webp",
         "isAvailable": true,
         "sortOrder": 15,
         "variants": [
@@ -1167,7 +1167,7 @@ export const STARTER_MENU = [
       {
         "name": "N\u01b0\u1edbc \u00c9p D\u1ee9a Mix \u1ed4i",
         "description": "M\u00f3n n\u01b0\u1edbc \u00e9p d\u1ee9a mix \u1ed5i v\u1edbi 2 l\u1ef1a ch\u1ecdn dung t\u00edch 500ml v\u00e0 700ml, c\u00f3 th\u1ec3 th\u00eam topping theo s\u1edf th\u00edch.",
-        "imageUrl": "https://placehold.co/800x600/f5f5f4/1c1917?text=N%C6%B0%E1%BB%9Bc%20%C3%89p%20D%E1%BB%A9a%20Mix%20%E1%BB%94i",
+        "imageUrl": "/uploads/menu-items/1774707409802-8f5d9001-9e9d-44db-9944-fcf98e1997ba-n-c-p-d-a-mix-i.webp",
         "isAvailable": true,
         "sortOrder": 16,
         "variants": [
@@ -1188,7 +1188,7 @@ export const STARTER_MENU = [
       {
         "name": "N\u01b0\u1edbc \u00c9p Chanh Leo",
         "description": "M\u00f3n n\u01b0\u1edbc \u00e9p chanh leo v\u1edbi 2 l\u1ef1a ch\u1ecdn dung t\u00edch 500ml v\u00e0 700ml, c\u00f3 th\u1ec3 th\u00eam topping theo s\u1edf th\u00edch.",
-        "imageUrl": "https://placehold.co/800x600/f5f5f4/1c1917?text=N%C6%B0%E1%BB%9Bc%20%C3%89p%20Chanh%20Leo",
+        "imageUrl": "/uploads/menu-items/1774707414918-f651795c-207b-4c08-86d9-ff331960ab45-n-c-p-chanh-leo-t-ng-topiing-nha-am-.webp",
         "isAvailable": true,
         "sortOrder": 17,
         "variants": [
@@ -1209,7 +1209,7 @@ export const STARTER_MENU = [
       {
         "name": "N\u01b0\u1edbc \u00c9p T\u00e1o Mix \u1ed4i",
         "description": "M\u00f3n n\u01b0\u1edbc \u00e9p t\u00e1o mix \u1ed5i v\u1edbi 2 l\u1ef1a ch\u1ecdn dung t\u00edch 500ml v\u00e0 700ml, c\u00f3 th\u1ec3 th\u00eam topping theo s\u1edf th\u00edch.",
-        "imageUrl": "https://placehold.co/800x600/f5f5f4/1c1917?text=N%C6%B0%E1%BB%9Bc%20%C3%89p%20T%C3%A1o%20Mix%20%E1%BB%94i",
+        "imageUrl": "/uploads/menu-items/1774707420771-8c735b37-94ba-4ad8-b650-5d6b4c08f049-n-c-p-t-o-mix-i.webp",
         "isAvailable": true,
         "sortOrder": 18,
         "variants": [
@@ -1230,7 +1230,7 @@ export const STARTER_MENU = [
       {
         "name": "N\u01b0\u1edbc \u00c9p C\u00f3c Bao T\u1eed",
         "description": "M\u00f3n n\u01b0\u1edbc \u00e9p c\u00f3c bao t\u1eed v\u1edbi 2 l\u1ef1a ch\u1ecdn dung t\u00edch 500ml v\u00e0 700ml, c\u00f3 th\u1ec3 th\u00eam topping theo s\u1edf th\u00edch.",
-        "imageUrl": "https://placehold.co/800x600/f5f5f4/1c1917?text=N%C6%B0%E1%BB%9Bc%20%C3%89p%20C%C3%B3c%20Bao%20T%E1%BB%AD",
+        "imageUrl": "/uploads/menu-items/1774707427448-ac5c3444-0981-414e-a9f9-8e5020246d5e-n-c-p-c-c-bao-t-.webp",
         "isAvailable": true,
         "sortOrder": 19,
         "variants": [
@@ -1251,7 +1251,7 @@ export const STARTER_MENU = [
       {
         "name": "N\u01b0\u1edbc \u00c9p C\u00e0 R\u1ed1t",
         "description": "M\u00f3n n\u01b0\u1edbc \u00e9p c\u00e0 r\u1ed1t v\u1edbi 2 l\u1ef1a ch\u1ecdn dung t\u00edch 500ml v\u00e0 700ml, c\u00f3 th\u1ec3 th\u00eam topping theo s\u1edf th\u00edch.",
-        "imageUrl": "https://placehold.co/800x600/f5f5f4/1c1917?text=N%C6%B0%E1%BB%9Bc%20%C3%89p%20C%C3%A0%20R%E1%BB%91t",
+        "imageUrl": "/uploads/menu-items/1774707432188-0238a935-4780-427a-ac92-a4a6d16fc94d-n-c-p-c-r-t.webp",
         "isAvailable": true,
         "sortOrder": 20,
         "variants": [
@@ -1272,7 +1272,7 @@ export const STARTER_MENU = [
       {
         "name": "N\u01b0\u1edbc \u00c9p T\u00e1o",
         "description": "M\u00f3n n\u01b0\u1edbc \u00e9p t\u00e1o v\u1edbi 2 l\u1ef1a ch\u1ecdn dung t\u00edch 500ml v\u00e0 700ml, c\u00f3 th\u1ec3 th\u00eam topping theo s\u1edf th\u00edch.",
-        "imageUrl": "https://placehold.co/800x600/f5f5f4/1c1917?text=N%C6%B0%E1%BB%9Bc%20%C3%89p%20T%C3%A1o",
+        "imageUrl": "/uploads/menu-items/1774707436498-69158dd6-5585-4b39-84b2-dd595c4f071c-n-c-p-t-o.webp",
         "isAvailable": true,
         "sortOrder": 21,
         "variants": [
@@ -1314,7 +1314,7 @@ export const STARTER_MENU = [
       {
         "name": "N\u01b0\u1edbc \u00c9p D\u1ee9a",
         "description": "M\u00f3n n\u01b0\u1edbc \u00e9p d\u1ee9a v\u1edbi 2 l\u1ef1a ch\u1ecdn dung t\u00edch 500ml v\u00e0 700ml, c\u00f3 th\u1ec3 th\u00eam topping theo s\u1edf th\u00edch.",
-        "imageUrl": "https://placehold.co/800x600/f5f5f4/1c1917?text=N%C6%B0%E1%BB%9Bc%20%C3%89p%20D%E1%BB%A9a",
+        "imageUrl": "/uploads/menu-items/1774707448625-13f229ce-019a-439a-a97d-2783f7d4fcb4-n-c-p-d-a.webp",
         "isAvailable": true,
         "sortOrder": 23,
         "variants": [
@@ -1335,7 +1335,7 @@ export const STARTER_MENU = [
       {
         "name": "N\u01b0\u1edbc \u00c9p Cam - D\u1ee9a",
         "description": "M\u00f3n n\u01b0\u1edbc \u00e9p cam - d\u1ee9a v\u1edbi 2 l\u1ef1a ch\u1ecdn dung t\u00edch 500ml v\u00e0 700ml, c\u00f3 th\u1ec3 th\u00eam topping theo s\u1edf th\u00edch.",
-        "imageUrl": "https://placehold.co/800x600/f5f5f4/1c1917?text=N%C6%B0%E1%BB%9Bc%20%C3%89p%20Cam%20-%20D%E1%BB%A9a",
+        "imageUrl": "/uploads/menu-items/1774707453719-0072f21d-44aa-4f79-b394-2dde986edf9f-n-c-p-cam-d-a.webp",
         "isAvailable": true,
         "sortOrder": 24,
         "variants": [
@@ -1356,7 +1356,7 @@ export const STARTER_MENU = [
       {
         "name": "N\u01b0\u1edbc \u00c9p Cam",
         "description": "M\u00f3n n\u01b0\u1edbc \u00e9p cam v\u1edbi 2 l\u1ef1a ch\u1ecdn dung t\u00edch 500ml v\u00e0 700ml, c\u00f3 th\u1ec3 th\u00eam topping theo s\u1edf th\u00edch.",
-        "imageUrl": "https://placehold.co/800x600/f5f5f4/1c1917?text=N%C6%B0%E1%BB%9Bc%20%C3%89p%20Cam",
+        "imageUrl": "/uploads/menu-items/1774707482561-b0232029-eab9-42ff-9f55-adae0e7097ce-n-c-p-cam.webp",
         "isAvailable": true,
         "sortOrder": 25,
         "variants": [
@@ -1377,7 +1377,7 @@ export const STARTER_MENU = [
       {
         "name": "N\u01b0\u1edbc \u00c9p C\u1ea7n T\u00e2y - D\u1ee9a",
         "description": "M\u00f3n n\u01b0\u1edbc \u00e9p c\u1ea7n t\u00e2y - d\u1ee9a v\u1edbi 2 l\u1ef1a ch\u1ecdn dung t\u00edch 500ml v\u00e0 700ml, c\u00f3 th\u1ec3 th\u00eam topping theo s\u1edf th\u00edch.",
-        "imageUrl": "https://placehold.co/800x600/f5f5f4/1c1917?text=N%C6%B0%E1%BB%9Bc%20%C3%89p%20C%E1%BA%A7n%20T%C3%A2y%20-%20D%E1%BB%A9a",
+        "imageUrl": "/uploads/menu-items/1774707488264-33827f4a-37d7-48ce-a022-fd6627088dac-n-c-p-c-n-t-y-d-a.webp",
         "isAvailable": true,
         "sortOrder": 26,
         "variants": [
@@ -1398,7 +1398,7 @@ export const STARTER_MENU = [
       {
         "name": "N\u01b0\u1edbc \u00c9p L\u1ef1u",
         "description": "M\u00f3n n\u01b0\u1edbc \u00e9p l\u1ef1u v\u1edbi 2 l\u1ef1a ch\u1ecdn dung t\u00edch 500ml v\u00e0 700ml, c\u00f3 th\u1ec3 th\u00eam topping theo s\u1edf th\u00edch.",
-        "imageUrl": "https://placehold.co/800x600/f5f5f4/1c1917?text=N%C6%B0%E1%BB%9Bc%20%C3%89p%20L%E1%BB%B1u",
+        "imageUrl": "/uploads/menu-items/1774707516044-7ab2692f-961c-4a8f-9d43-2c950f07a48c-n-c-p-l-u.webp",
         "isAvailable": true,
         "sortOrder": 27,
         "variants": [
@@ -1446,7 +1446,7 @@ export const STARTER_MENU = [
       {
         "name": "Sinh T\u1ed1 B\u01a1 Kem Chesse M\u00f3n M\u1edbi Si\u00eau Ngon",
         "description": "M\u00f3n sinh t\u1ed1 b\u01a1 kem chesse m\u00f3n m\u1edbi si\u00eau ngon v\u1edbi 2 l\u1ef1a ch\u1ecdn dung t\u00edch 500ml v\u00e0 700ml, c\u00f3 th\u1ec3 th\u00eam topping theo s\u1edf th\u00edch.",
-        "imageUrl": "https://placehold.co/800x600/f5f5f4/1c1917?text=Sinh%20T%E1%BB%91%20B%C6%A1%20Kem%20Chesse%20M%C3%B3n%20M%E1%BB%9Bi%20Si%C3%AAu%20Ngon",
+        "imageUrl": "/uploads/menu-items/1774707628015-bc913ab1-7dc2-497f-9c02-6f1e6ba02761-sinh-t-b-kem-chesse-m-n-m-i-si-u-ngon.webp",
         "isAvailable": true,
         "sortOrder": 1,
         "variants": [
@@ -1467,7 +1467,7 @@ export const STARTER_MENU = [
       {
         "name": "B\u01a1 Gi\u00e0 D\u1eeba N\u01b0\u1edbng Si\u00eau Ngon",
         "description": "M\u00f3n b\u01a1 gi\u00e0 d\u1eeba n\u01b0\u1edbng si\u00eau ngon v\u1edbi 2 l\u1ef1a ch\u1ecdn dung t\u00edch 500ml v\u00e0 700ml, c\u00f3 th\u1ec3 th\u00eam topping theo s\u1edf th\u00edch.",
-        "imageUrl": "https://placehold.co/800x600/f5f5f4/1c1917?text=B%C6%A1%20Gi%C3%A0%20D%E1%BB%ABa%20N%C6%B0%E1%BB%9Bng%20Si%C3%AAu%20Ngon",
+        "imageUrl": "/uploads/menu-items/1774707615200-3de7293c-e525-4a02-9de9-29896c109c7a-b-gi-d-a-n-ng-si-u-ngon.webp",
         "isAvailable": true,
         "sortOrder": 2,
         "variants": [
@@ -1488,7 +1488,7 @@ export const STARTER_MENU = [
       {
         "name": "Chanh Leo N\u00fai \u0110\u00e1 Ahihi",
         "description": "M\u00f3n chanh leo n\u00fai \u0111\u00e1 ahihi v\u1edbi 2 l\u1ef1a ch\u1ecdn dung t\u00edch 500ml v\u00e0 700ml, c\u00f3 th\u1ec3 th\u00eam topping theo s\u1edf th\u00edch.",
-        "imageUrl": "https://placehold.co/800x600/f5f5f4/1c1917?text=Chanh%20Leo%20N%C3%BAi%20%C4%90%C3%A1%20Ahihi",
+        "imageUrl": "/uploads/menu-items/1774707623089-8eb0bd5c-7fe0-43f8-a664-d87ab7c0ea7c-chanh-leo-n-i-ahihi.webp",
         "isAvailable": true,
         "sortOrder": 3,
         "variants": [
@@ -1509,7 +1509,7 @@ export const STARTER_MENU = [
       {
         "name": "Kem B\u01a1 D\u1eeba \u0110\u00e0 L\u1ea1t",
         "description": "M\u00f3n kem b\u01a1 d\u1eeba \u0111\u00e0 l\u1ea1t v\u1edbi 2 l\u1ef1a ch\u1ecdn dung t\u00edch 500ml v\u00e0 700ml, c\u00f3 th\u1ec3 th\u00eam topping theo s\u1edf th\u00edch.",
-        "imageUrl": "https://placehold.co/800x600/f5f5f4/1c1917?text=Kem%20B%C6%A1%20D%E1%BB%ABa%20%C4%90%C3%A0%20L%E1%BA%A1t",
+        "imageUrl": "/uploads/menu-items/1774707605162-43029d71-5093-4079-bf2f-5d4df0e2517f-kem-b-d-a-l-t.webp",
         "isAvailable": true,
         "sortOrder": 4,
         "variants": [
@@ -1530,7 +1530,7 @@ export const STARTER_MENU = [
       {
         "name": "Kem B\u01a1 S\u1ea7u Ri\u00eang",
         "description": "M\u00f3n kem b\u01a1 s\u1ea7u ri\u00eang v\u1edbi 2 l\u1ef1a ch\u1ecdn dung t\u00edch 500ml v\u00e0 700ml, c\u00f3 th\u1ec3 th\u00eam topping theo s\u1edf th\u00edch.",
-        "imageUrl": "https://placehold.co/800x600/f5f5f4/1c1917?text=Kem%20B%C6%A1%20S%E1%BA%A7u%20Ri%C3%AAng",
+        "imageUrl": "/uploads/menu-items/1774707634962-445fa430-b885-48c6-b6ef-0c4110e43486-kem-b-s-u-ri-ng.webp",
         "isAvailable": true,
         "sortOrder": 5,
         "variants": [
@@ -1551,7 +1551,7 @@ export const STARTER_MENU = [
       {
         "name": "Sinh T\u1ed1 B\u01a1",
         "description": "M\u00f3n sinh t\u1ed1 b\u01a1 v\u1edbi 2 l\u1ef1a ch\u1ecdn dung t\u00edch 500ml v\u00e0 700ml, c\u00f3 th\u1ec3 th\u00eam topping theo s\u1edf th\u00edch.",
-        "imageUrl": "https://placehold.co/800x600/f5f5f4/1c1917?text=Sinh%20T%E1%BB%91%20B%C6%A1",
+        "imageUrl": "/uploads/menu-items/1774707717002-968ef61f-f3a6-4adf-929d-fd8e41052232-sinh-t-b-.webp",
         "isAvailable": true,
         "sortOrder": 6,
         "variants": [
@@ -1572,7 +1572,7 @@ export const STARTER_MENU = [
       {
         "name": "Sinh T\u1ed1 Xo\u00e0i - Chanh Leo",
         "description": "M\u00f3n sinh t\u1ed1 xo\u00e0i - chanh leo v\u1edbi 2 l\u1ef1a ch\u1ecdn dung t\u00edch 500ml v\u00e0 700ml, c\u00f3 th\u1ec3 th\u00eam topping theo s\u1edf th\u00edch.",
-        "imageUrl": "https://placehold.co/800x600/f5f5f4/1c1917?text=Sinh%20T%E1%BB%91%20Xo%C3%A0i%20-%20Chanh%20Leo",
+        "imageUrl": "/uploads/menu-items/1774707722480-69f7ddc5-137d-4915-94fe-a09c19026555-sinh-t-xo-i-chanh-leo.webp",
         "isAvailable": true,
         "sortOrder": 7,
         "variants": [
@@ -1593,7 +1593,7 @@ export const STARTER_MENU = [
       {
         "name": "Sinh T\u1ed1 B\u01a1 D\u1eeba",
         "description": "M\u00f3n sinh t\u1ed1 b\u01a1 d\u1eeba v\u1edbi 2 l\u1ef1a ch\u1ecdn dung t\u00edch 500ml v\u00e0 700ml, c\u00f3 th\u1ec3 th\u00eam topping theo s\u1edf th\u00edch.",
-        "imageUrl": "https://placehold.co/800x600/f5f5f4/1c1917?text=Sinh%20T%E1%BB%91%20B%C6%A1%20D%E1%BB%ABa",
+        "imageUrl": "/uploads/menu-items/1774707726714-cf194441-6334-4219-a706-fe0e2b91ca5b-sinh-t-b-d-a.webp",
         "isAvailable": true,
         "sortOrder": 8,
         "variants": [
@@ -1614,7 +1614,7 @@ export const STARTER_MENU = [
       {
         "name": "Sinh T\u1ed1 B\u01a1 Xo\u00e0i",
         "description": "M\u00f3n sinh t\u1ed1 b\u01a1 xo\u00e0i v\u1edbi 2 l\u1ef1a ch\u1ecdn dung t\u00edch 500ml v\u00e0 700ml, c\u00f3 th\u1ec3 th\u00eam topping theo s\u1edf th\u00edch.",
-        "imageUrl": "https://placehold.co/800x600/f5f5f4/1c1917?text=Sinh%20T%E1%BB%91%20B%C6%A1%20Xo%C3%A0i",
+        "imageUrl": "/uploads/menu-items/1774707731361-9f75c979-b3bb-42f7-ad65-e67905dccdfb-sinh-t-b-xo-i.webp",
         "isAvailable": true,
         "sortOrder": 9,
         "variants": [
@@ -1635,7 +1635,7 @@ export const STARTER_MENU = [
       {
         "name": "Sinh T\u1ed1 M\u00e3ng C\u1ea7u",
         "description": "M\u00f3n sinh t\u1ed1 m\u00e3ng c\u1ea7u v\u1edbi 2 l\u1ef1a ch\u1ecdn dung t\u00edch 500ml v\u00e0 700ml, c\u00f3 th\u1ec3 th\u00eam topping theo s\u1edf th\u00edch.",
-        "imageUrl": "https://placehold.co/800x600/f5f5f4/1c1917?text=Sinh%20T%E1%BB%91%20M%C3%A3ng%20C%E1%BA%A7u",
+        "imageUrl": "/uploads/menu-items/1774707763690-b2392ff6-4be0-4ccc-8831-1969fff3874f-sinh-t-m-ng-c-u.webp",
         "isAvailable": true,
         "sortOrder": 10,
         "variants": [
@@ -1656,7 +1656,7 @@ export const STARTER_MENU = [
       {
         "name": "S\u1eefa Chua D\u1ebbo C\u1ed1m Non",
         "description": "M\u00f3n s\u1eefa chua d\u1ebbo c\u1ed1m non v\u1edbi 2 l\u1ef1a ch\u1ecdn dung t\u00edch 500ml v\u00e0 700ml, c\u00f3 th\u1ec3 th\u00eam topping theo s\u1edf th\u00edch.",
-        "imageUrl": "https://placehold.co/800x600/f5f5f4/1c1917?text=S%E1%BB%AFa%20Chua%20D%E1%BA%BBo%20C%E1%BB%91m%20Non",
+        "imageUrl": "/uploads/menu-items/1774707743527-b67d4796-91de-4bc7-ad63-82875ea669f3-s-a-chua-d-o-c-m-non.webp",
         "isAvailable": true,
         "sortOrder": 11,
         "variants": [
@@ -1677,7 +1677,7 @@ export const STARTER_MENU = [
       {
         "name": "Sinh T\u1ed1 Xo\u00e0i D\u1eeba",
         "description": "M\u00f3n sinh t\u1ed1 xo\u00e0i d\u1eeba v\u1edbi 2 l\u1ef1a ch\u1ecdn dung t\u00edch 500ml v\u00e0 700ml, c\u00f3 th\u1ec3 th\u00eam topping theo s\u1edf th\u00edch.",
-        "imageUrl": "https://placehold.co/800x600/f5f5f4/1c1917?text=Sinh%20T%E1%BB%91%20Xo%C3%A0i%20D%E1%BB%ABa",
+        "imageUrl": "/uploads/menu-items/1774707748205-2aacf90b-6b46-4b12-a44c-99316dd507e8-sinh-t-xo-i-d-a.webp",
         "isAvailable": true,
         "sortOrder": 12,
         "variants": [
@@ -1698,7 +1698,7 @@ export const STARTER_MENU = [
       {
         "name": "Sinh T\u1ed1 Xo\u00e0i M\u00e3ng C\u1ea7u",
         "description": "M\u00f3n sinh t\u1ed1 xo\u00e0i m\u00e3ng c\u1ea7u v\u1edbi 2 l\u1ef1a ch\u1ecdn dung t\u00edch 500ml v\u00e0 700ml, c\u00f3 th\u1ec3 th\u00eam topping theo s\u1edf th\u00edch.",
-        "imageUrl": "https://placehold.co/800x600/f5f5f4/1c1917?text=Sinh%20T%E1%BB%91%20Xo%C3%A0i%20M%C3%A3ng%20C%E1%BA%A7u",
+        "imageUrl": "/uploads/menu-items/1774707772769-a0a1a4a0-f080-4e9f-8284-d27ebc55b094-sinh-t-xo-i-m-ng-c-u.webp",
         "isAvailable": true,
         "sortOrder": 13,
         "variants": [
@@ -1719,7 +1719,7 @@ export const STARTER_MENU = [
       {
         "name": "Sinh T\u1ed1 Xo\u00e0i",
         "description": "M\u00f3n sinh t\u1ed1 xo\u00e0i v\u1edbi 2 l\u1ef1a ch\u1ecdn dung t\u00edch 500ml v\u00e0 700ml, c\u00f3 th\u1ec3 th\u00eam topping theo s\u1edf th\u00edch.",
-        "imageUrl": "https://placehold.co/800x600/f5f5f4/1c1917?text=Sinh%20T%E1%BB%91%20Xo%C3%A0i",
+        "imageUrl": "/uploads/menu-items/1774707783794-a07a0994-0c96-4e9f-aaea-a741a8591c45-sinh-t-xo-i.webp",
         "isAvailable": true,
         "sortOrder": 14,
         "variants": [
@@ -1740,7 +1740,7 @@ export const STARTER_MENU = [
       {
         "name": "Chanh Tuy\u1ebft AvoMoRi - Sinh T\u1ed1 Chanh Tuy\u1ebft",
         "description": "M\u00f3n chanh tuy\u1ebft avomori - sinh t\u1ed1 chanh tuy\u1ebft v\u1edbi 2 l\u1ef1a ch\u1ecdn dung t\u00edch 500ml v\u00e0 700ml, c\u00f3 th\u1ec3 th\u00eam topping theo s\u1edf th\u00edch.",
-        "imageUrl": "https://placehold.co/800x600/f5f5f4/1c1917?text=Chanh%20Tuy%E1%BA%BFt%20AvoMoRi%20-%20Sinh%20T%E1%BB%91%20Chanh%20Tuy%E1%BA%BFt",
+        "imageUrl": "/uploads/menu-items/1774707788495-600b5e7b-e2a9-4360-809c-73c2c7c1ea41-chanh-tuy-t-aomori-sinh-t-chanh-tuy-t.webp",
         "isAvailable": true,
         "sortOrder": 15,
         "variants": [
