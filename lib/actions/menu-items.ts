@@ -1,4 +1,4 @@
-﻿"use server";
+"use server";
 
 import { mkdir, writeFile } from "fs/promises";
 import path from "path";
@@ -12,6 +12,7 @@ import {
   deleteMenuItemSchema,
   toggleMenuItemAvailabilitySchema,
   updateMenuItemImageSchema,
+  updateMenuItemPricesSchema,
 } from "@/lib/validations/menu-item";
 
 const ALLOWED_IMAGE_TYPES = new Set(["image/jpeg", "image/png", "image/webp"]);
@@ -477,4 +478,38 @@ export async function createManualMenuItemAction(formData: FormData) {
     ok: true,
     message: `Đã thêm món ${result.itemName} vào danh mục ${result.categoryName}.`,
   };
+}
+
+export async function updateMenuItemPricesAction(input: {
+  menuItemId: string;
+  variants: Array<{ id: string; price: number }>;
+}) {
+  const session = await auth();
+
+  if (session?.user?.role !== "ADMIN") {
+    return { ok: false, error: "Bạn không có quyền cập nhật giá món." };
+  }
+
+  const parsed = updateMenuItemPricesSchema.safeParse(input);
+
+  if (!parsed.success) {
+    return { ok: false, error: parsed.error.issues[0]?.message ?? "Dữ liệu giá không hợp lệ." };
+  }
+
+  try {
+    await prisma.$transaction(
+      parsed.data.variants.map((v) =>
+        prisma.menuItemVariant.update({
+          where: { id: v.id },
+          data: { price: v.price },
+        })
+      )
+    );
+
+    revalidateMenuPaths();
+
+    return { ok: true, message: "Đã cập nhật giá cho các loại size." };
+  } catch (error) {
+    return { ok: false, error: "Có lỗi xảy ra khi cập nhật giá." };
+  }
 }

@@ -1,4 +1,5 @@
 ﻿import type { OrderStatus } from "@prisma/client";
+import { OrderPrintButton } from "@/components/admin/order-print-button";
 import { OrderStatusForm } from "@/components/admin/order-status-form";
 import { OrderSummaryCard } from "@/components/orders/order-summary-card";
 
@@ -44,6 +45,10 @@ export function OrderCard({ order }: Props) {
         <>
           <p className="mb-3 text-sm font-medium text-stone-600">Cập nhật trạng thái</p>
           <OrderStatusForm orderId={order.id} currentStatus={order.status} />
+          <div className="mt-5 border-t border-stone-200 pt-5">
+            <p className="mb-3 text-sm font-medium text-stone-600">In đơn hàng</p>
+            <OrderPrintButton orderId={order.id} />
+          </div>
         </>
       }
     />

@@ -1,10 +1,15 @@
 "use client";
 
-import { Bell, BellRing, RefreshCw, Smartphone, Volume2, VolumeX } from "lucide-react";
+import { Bell, BellRing, Printer, RefreshCw, Smartphone, Volume2, VolumeX } from "lucide-react";
 import { useEffect, useRef, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { formatCurrency, formatDateTime } from "@/lib/utils";
 import { getFirebaseClientApp, getFirebaseVapidKey, isFirebaseWebPushConfigured } from "@/lib/firebase-client";
+import {
+  AUTO_PRINT_PREFERENCE_KEY,
+  LAST_AUTO_PRINTED_ORDER_KEY,
+} from "@/lib/order-print";
+import { printOrderById } from "@/lib/order-print-client";
 
 type OrderSnapshot = {
   id: string;
@@ -21,6 +26,7 @@ type Props = {
 
 type LatestOrderResponse = {
   latestOrder: OrderSnapshot | null;
+  newOrders: OrderSnapshot[];
   newOrderCount: number;
 };
 
@@ -160,6 +166,22 @@ function getStoredFcmToken() {
   return window.localStorage.getItem(FCM_TOKEN_STORAGE_KEY);
 }
 
+function getStoredAutoPrintPreference() {
+  if (typeof window === "undefined") {
+    return false;
+  }
+
+  return window.localStorage.getItem(AUTO_PRINT_PREFERENCE_KEY) === "true";
+}
+
+function getLastAutoPrintedOrderId() {
+  if (typeof window === "undefined") {
+    return null;
+  }
+
+  return window.localStorage.getItem(LAST_AUTO_PRINTED_ORDER_KEY);
+}
+
 function parseOrderFromPushData(data: FcmOrderData | undefined): OrderSnapshot | null {
   if (!data?.orderId || !data.orderCode || !data.customerName || !data.totalAmount || !data.createdAt) {
     return null;
@@ -190,17 +212,25 @@ export function AdminOrderNotifications({ initialLatestOrder, initialNewOrderCou
   const [pushState, setPushState] = useState<PushState>("unknown");
   const [pushError, setPushError] = useState<string | null>(null);
   const [soundEnabled, setSoundEnabled] = useState(false);
+  const [autoPrintEnabled, setAutoPrintEnabled] = useState(false);
+  const [printMessage, setPrintMessage] = useState<string | null>(null);
   const [isSoundSupported, setIsSoundSupported] = useState(false);
   const [isRefreshing, startTransition] = useTransition();
   const latestOrderIdRef = useRef<string | null>(initialLatestOrder?.id ?? null);
+  const latestOrderCodeRef = useRef(initialLatestOrder?.orderCode ?? 0);
   const baseTitleRef = useRef("Phee Juice Tran Cung");
   const audioContextRef = useRef<AudioContext | null>(null);
   const serviceWorkerRegistrationRef = useRef<ServiceWorkerRegistration | null>(null);
   const soundEnabledRef = useRef(false);
+  const autoPrintEnabledRef = useRef(false);
 
   useEffect(() => {
     soundEnabledRef.current = soundEnabled;
   }, [soundEnabled]);
+
+  useEffect(() => {
+    autoPrintEnabledRef.current = autoPrintEnabled;
+  }, [autoPrintEnabled]);
 
   useEffect(() => {
     if (typeof document !== "undefined") {
@@ -209,8 +239,11 @@ export function AdminOrderNotifications({ initialLatestOrder, initialNewOrderCou
 
     if (typeof window !== "undefined") {
       const savedSoundEnabled = window.localStorage.getItem(SOUND_PREFERENCE_KEY) === "true";
+      const savedAutoPrintEnabled = getStoredAutoPrintPreference();
       setSoundEnabled(savedSoundEnabled);
+      setAutoPrintEnabled(savedAutoPrintEnabled);
       soundEnabledRef.current = savedSoundEnabled;
+      autoPrintEnabledRef.current = savedAutoPrintEnabled;
     }
 
     setIsSoundSupported(Boolean(getAudioContextConstructor()));
@@ -223,6 +256,25 @@ export function AdminOrderNotifications({ initialLatestOrder, initialNewOrderCou
 
     setPermission(Notification.permission);
   }, []);
+
+  const triggerAutoPrint = async (order: OrderSnapshot) => {
+    if (!autoPrintEnabledRef.current || typeof window === "undefined") {
+      return;
+    }
+
+    if (getLastAutoPrintedOrderId() === order.id) {
+      return;
+    }
+
+    try {
+      window.localStorage.setItem(LAST_AUTO_PRINTED_ORDER_KEY, order.id);
+      const printableOrder = await printOrderById(order.id);
+      setPrintMessage(`Da mo hop thoai in cho don #${printableOrder.orderCode}.`);
+    } catch (error) {
+      window.localStorage.removeItem(LAST_AUTO_PRINTED_ORDER_KEY);
+      setPrintMessage(error instanceof Error ? error.message : "Khong the tu dong in don moi.");
+    }
+  };
 
   useEffect(() => {
     if (typeof document === "undefined") {
@@ -279,6 +331,7 @@ export function AdminOrderNotifications({ initialLatestOrder, initialNewOrderCou
           }
 
           latestOrderIdRef.current = realtimeOrder.id;
+          latestOrderCodeRef.current = realtimeOrder.orderCode;
           setLatestOrder(realtimeOrder);
           setNewOrderCount((currentCount) => currentCount + 1);
           setAnnouncement(`Co don moi #${realtimeOrder.orderCode} tu ${realtimeOrder.customerName}. Danh sach don da duoc cap nhat.`);
@@ -292,6 +345,7 @@ export function AdminOrderNotifications({ initialLatestOrder, initialNewOrderCou
           }
 
           void showOrderNotification(realtimeOrder, serviceWorkerRegistrationRef).catch(() => false);
+          void triggerAutoPrint(realtimeOrder);
 
           startTransition(() => {
             router.refresh();
@@ -335,7 +389,8 @@ export function AdminOrderNotifications({ initialLatestOrder, initialNewOrderCou
       isPolling = true;
 
       try {
-        const response = await fetch("/api/admin/orders/latest", {
+        const afterOrderCode = latestOrderCodeRef.current;
+        const response = await fetch(`/api/admin/orders/stream?afterOrderCode=${afterOrderCode}`, {
           cache: "no-store",
         });
 
@@ -352,11 +407,12 @@ export function AdminOrderNotifications({ initialLatestOrder, initialNewOrderCou
         setLatestOrder(data.latestOrder);
         setNewOrderCount(data.newOrderCount);
 
-        const currentLatestId = data.latestOrder?.id ?? null;
+        const latestIncomingOrder = data.newOrders[data.newOrders.length - 1];
 
-        if (currentLatestId && currentLatestId !== latestOrderIdRef.current) {
-          latestOrderIdRef.current = currentLatestId;
-          setAnnouncement(`Co don moi #${data.latestOrder.orderCode} tu ${data.latestOrder.customerName}. Danh sach don da duoc cap nhat.`);
+        if (latestIncomingOrder) {
+          latestOrderIdRef.current = latestIncomingOrder.id;
+          latestOrderCodeRef.current = latestIncomingOrder.orderCode;
+          setAnnouncement(`Co don moi #${latestIncomingOrder.orderCode} tu ${latestIncomingOrder.customerName}. Danh sach don da duoc cap nhat.`);
 
           if (soundEnabledRef.current) {
             void playNotificationSound(audioContextRef).catch(() => false);
@@ -366,15 +422,26 @@ export function AdminOrderNotifications({ initialLatestOrder, initialNewOrderCou
             navigator.vibrate([220, 120, 220]);
           }
 
-          void showOrderNotification(data.latestOrder, serviceWorkerRegistrationRef).catch(() => false);
+          void showOrderNotification(latestIncomingOrder, serviceWorkerRegistrationRef).catch(() => false);
+
+          void (async () => {
+            for (const order of data.newOrders) {
+              await triggerAutoPrint(order);
+            }
+          })();
 
           startTransition(() => {
             router.refresh();
           });
         }
 
-        if (!currentLatestId) {
+        if (data.latestOrder) {
+          latestOrderCodeRef.current = data.latestOrder.orderCode;
+        }
+
+        if (!data.latestOrder) {
           latestOrderIdRef.current = null;
+          latestOrderCodeRef.current = 0;
         }
       } finally {
         isPolling = false;
@@ -527,6 +594,17 @@ export function AdminOrderNotifications({ initialLatestOrder, initialNewOrderCou
     setSoundEnabled(soundReady);
   };
 
+  const toggleAutoPrint = () => {
+    if (typeof window === "undefined") {
+      return;
+    }
+
+    const nextValue = !autoPrintEnabled;
+    window.localStorage.setItem(AUTO_PRINT_PREFERENCE_KEY, String(nextValue));
+    setAutoPrintEnabled(nextValue);
+    setPrintMessage(nextValue ? "Tu dong in da bat. Don moi se mo hop thoai in ngay khi nhan duoc." : "Tu dong in da tat.");
+  };
+
   const pushStatusText =
     pushState === "enabled"
       ? "Push dien thoai da san sang"
@@ -603,6 +681,15 @@ export function AdminOrderNotifications({ initialLatestOrder, initialNewOrderCou
             {soundEnabled ? <Volume2 className="h-4 w-4" /> : <VolumeX className="h-4 w-4" />}
             {isSoundSupported ? (soundEnabled ? "Am thanh da bat" : "Bat am thanh canh bao") : "Thiet bi khong ho tro am thanh"}
           </button>
+
+          <button
+            type="button"
+            className={autoPrintEnabled ? "button-primary gap-2" : "button-secondary gap-2"}
+            onClick={toggleAutoPrint}
+          >
+            <Printer className="h-4 w-4" />
+            {autoPrintEnabled ? "Tu dong in da bat" : "Bat tu dong in"}
+          </button>
         </div>
       </div>
 
@@ -620,8 +707,14 @@ export function AdminOrderNotifications({ initialLatestOrder, initialNewOrderCou
         </div>
       ) : null}
 
+      {printMessage ? (
+        <div className="mt-4 rounded-3xl border border-amber-200 bg-amber-50 px-5 py-4 text-sm text-amber-900">
+          {printMessage}
+        </div>
+      ) : null}
+
       <p className="mt-4 text-sm text-stone-500">
-        Push FCM se can them bo khoa Firebase trong env. Tren mot so iPhone, thong bao nen web thuong chi on dinh khi website duoc them vao man hinh chinh.
+        Push FCM se can them bo khoa Firebase trong env. Auto print se mo hop thoai in cua trinh duyet cho moi don moi, phu hop khi may admin dang mo san trang quan ly don.
       </p>
 
       {latestOrder ? (

@@ -1,0 +1,10 @@
+{
+  "version": "1.7.0",
+  "appliedMigrations": [
+    "api_key_security_v1",
+    "persona_packaging_v1",
+    "bridge_sync_await_v1",
+    "graph_knowledge_v1",
+    "knowledge_registry_v1.7"
+  ]
+}

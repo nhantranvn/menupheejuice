@@ -1,4 +1,4 @@
-﻿export const dynamic = "force-dynamic";
+export const dynamic = "force-dynamic";
 
 import Link from "next/link";
 import { redirect } from "next/navigation";
@@ -9,6 +9,7 @@ import { MenuCategoryDangerActions } from "@/components/admin/menu-category-dang
 import { MenuItemAvailabilityToggle } from "@/components/admin/menu-item-availability-toggle";
 import { MenuItemDangerActions } from "@/components/admin/menu-item-danger-actions";
 import { MenuItemImageForm } from "@/components/admin/menu-item-image-form";
+import { MenuItemPriceForm } from "@/components/admin/menu-item-price-form";
 import { MenuItemPreviewImage } from "@/components/admin/menu-item-preview-image";
 import { STARTER_MENU, STARTER_MENU_TOTAL_ITEMS } from "@/lib/constants/starter-menu";
 import { prisma } from "@/lib/prisma";
@@ -213,6 +214,7 @@ export default async function AdminMenuItemsPage() {
 
                   <div className="grid gap-3">
                     <MenuItemImageForm menuItemId={item.id} />
+                    <MenuItemPriceForm menuItemId={item.id} variants={item.variants.map(v => ({ id: v.id, name: v.name, price: v.price }))} />
                     <MenuItemAvailabilityToggle menuItemId={item.id} menuItemName={item.name} isAvailable={item.isAvailable} />
                     <MenuItemDangerActions menuItemId={item.id} menuItemName={item.name} />
                   </div>

@@ -1,9 +1,9 @@
-﻿"use client";
+"use client";
 
 import Image from "next/image";
 import Link from "next/link";
 import { useSession } from "next-auth/react";
-import { ClipboardList, ImagePlus, ShieldCheck } from "lucide-react";
+import { ClipboardList, ImagePlus, PlusCircle, ShieldCheck } from "lucide-react";
 import { CartNavButton } from "@/components/cart/cart-nav-button";
 import { SignOutButton } from "@/components/auth/sign-out-button";
 
@@ -55,14 +55,21 @@ export function NavbarClient() {
                   className="inline-flex items-center rounded-full px-4 py-2 text-sm font-medium text-orange-700 transition hover:bg-orange-50"
                 >
                   <ShieldCheck className="mr-2 h-4 w-4" />
-                  Quản trị
+                  Đơn hàng
+                </Link>
+                <Link
+                  href="/admin/toppings"
+                  className="inline-flex items-center rounded-full px-4 py-2 text-sm font-medium text-stone-600 transition hover:bg-stone-100 hover:text-stone-950"
+                >
+                  <PlusCircle className="mr-2 h-4 w-4" />
+                  Topping
                 </Link>
                 <Link
                   href="/admin/menu-items"
                   className="inline-flex items-center rounded-full px-4 py-2 text-sm font-medium text-stone-600 transition hover:bg-stone-100 hover:text-stone-950"
                 >
                   <ImagePlus className="mr-2 h-4 w-4" />
-                  Ảnh món
+                  Quản trị
                 </Link>
               </>
             ) : null}
@@ -70,7 +77,7 @@ export function NavbarClient() {
 
           <CartNavButton />
 
-          {isReady && isLoggedIn ? (
+          {isReady && isLoggedIn && session?.user ? (
             <div className="hidden items-center gap-3 md:flex">
               <div className="text-right">
                 <p className="text-sm font-semibold">{session.user.name ?? session.user.email}</p>

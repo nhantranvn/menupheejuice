@@ -1,4 +1,4 @@
-﻿import { z } from "zod";
+import { z } from "zod";
 
 export const updateMenuItemImageSchema = z.object({
   menuItemId: z.string().min(1, "Thiếu mã món cần cập nhật ảnh."),
@@ -20,4 +20,11 @@ export const createManualMenuItemSchema = z.object({
   description: z.string().trim().max(500, "Mô tả quá dài.").optional(),
   imageUrl: z.string().trim().url("Ảnh mẫu cần là một đường dẫn hợp lệ.").optional().or(z.literal("")),
   isAvailable: z.boolean().default(true),
+});
+export const updateMenuItemPricesSchema = z.object({
+  menuItemId: z.string().min(1, "Thiếu mã món cần cập nhật giá."),
+  variants: z.array(z.object({
+    id: z.string().min(1, "Thiếu mã size."),
+    price: z.number().min(0, "Giá không được nhỏ hơn 0."),
+  })),
 });
