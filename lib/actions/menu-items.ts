@@ -238,14 +238,36 @@ export async function updateMenuItemImageAction(formData: FormData) {
 
     const buffer = Buffer.from(await imageFile.arrayBuffer());
     const storage = buildMenuItemImageStoragePaths(imageFile.name);
-    const absolutePath = path.join(process.cwd(), storage.relativeDiskPath);
+    
+    let finalImageUrl = storage.publicUrl;
 
-    await mkdir(path.dirname(absolutePath), { recursive: true });
-    await writeFile(absolutePath, buffer);
+    try {
+      const { getFirebaseAdminStorage } = await import("@/lib/firebase-admin");
+      const firebaseStorage = getFirebaseAdminStorage();
+      const bucket = firebaseStorage.bucket();
+      const file = bucket.file(`menu-items/${storage.fileName}`);
+      
+      await file.save(buffer, {
+        metadata: {
+          contentType: imageFile.type,
+        },
+        public: true,
+      });
+
+      // Firebase public URL format: https://storage.googleapis.com/BUCKET_NAME/PATH
+      finalImageUrl = `https://storage.googleapis.com/${bucket.name}/menu-items/${storage.fileName}`;
+    } catch (firebaseError) {
+      console.warn("Firebase upload failed, falling back to local filesystem:", firebaseError);
+      
+      // Fallback to local filesystem (only works on environments with write access)
+      const absolutePath = path.join(process.cwd(), storage.relativeDiskPath);
+      await mkdir(path.dirname(absolutePath), { recursive: true });
+      await writeFile(absolutePath, buffer);
+    }
 
     await prisma.menuItem.update({
       where: { id: menuItem.id },
-      data: { imageUrl: storage.publicUrl },
+      data: { imageUrl: finalImageUrl },
     });
 
     revalidateMenuPaths();
