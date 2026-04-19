@@ -79,29 +79,35 @@ model VerificationToken {
 }
 
 model MenuCategory {
-  id        String     @id @default(cuid())
-  name      String     @unique
-  sortOrder Int        @default(0)
-  items     MenuItem[]
-  createdAt DateTime   @default(now())
-  updatedAt DateTime   @updatedAt
+  id        String               @id @default(cuid())
+  name      String               @unique
+  sortOrder Int                  @default(0)
+  items     MenuItemInCategory[]
+  createdAt DateTime             @default(now())
+  updatedAt DateTime             @updatedAt
 }
 
 model MenuItem {
-  id          String            @id @default(cuid())
-  name        String
+  id          String               @id @default(cuid())
+  name        String               @unique
   description String?
   imageUrl    String?
-  isAvailable Boolean           @default(true)
-  sortOrder   Int               @default(0)
-  categoryId  String
-  category    MenuCategory      @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  isAvailable Boolean              @default(true)
+  categories  MenuItemInCategory[]
   variants    MenuItemVariant[]
   orderItems  OrderItem[]
-  createdAt   DateTime          @default(now())
-  updatedAt   DateTime          @updatedAt
+  createdAt   DateTime             @default(now())
+  updatedAt   DateTime             @updatedAt
+}
 
-  @@unique([categoryId, name])
+model MenuItemInCategory {
+  menuItemId String
+  categoryId String
+  sortOrder  Int          @default(0)
+  menuItem   MenuItem     @relation(fields: [menuItemId], references: [id], onDelete: Cascade)
+  category   MenuCategory @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+
+  @@id([menuItemId, categoryId])
 }
 
 model MenuItemVariant {

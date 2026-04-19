@@ -1,4 +1,4 @@
-﻿export const dynamic = "force-dynamic";
+export const dynamic = "force-dynamic";
 
 import Link from "next/link";
 import { CategorySection } from "@/components/menu/category-section";
@@ -44,15 +44,19 @@ function EmptyState({ title, description }: { title: string; description: string
 
 export default async function MenuPage() {
   try {
-    const [categories, rawToppings] = await Promise.all([
+    const [categoriesRaw, rawToppings] = await Promise.all([
       prisma.menuCategory.findMany({
         orderBy: [{ sortOrder: "asc" }, { name: "asc" }],
         include: {
           items: {
-            orderBy: [{ sortOrder: "asc" }, { name: "asc" }],
+            orderBy: [{ sortOrder: "asc" }],
             include: {
-              variants: {
-                orderBy: [{ sortOrder: "asc" }, { sizeMl: "asc" }],
+              menuItem: {
+                include: {
+                  variants: {
+                    orderBy: [{ sortOrder: "asc" }, { sizeMl: "asc" }],
+                  },
+                },
               },
             },
           },
@@ -88,6 +92,11 @@ export default async function MenuPage() {
         }, new Map<string, (typeof rawToppings)[number]>())
         .values(),
     );
+
+    const categories = categoriesRaw.map((cat) => ({
+      ...cat,
+      items: cat.items.map((link) => link.menuItem),
+    }));
 
     if (!categories.length) {
       return (

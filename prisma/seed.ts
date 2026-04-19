@@ -211,35 +211,60 @@ async function main() {
 
     for (let itemIndex = 0; itemIndex < categorySeed.items.length; itemIndex += 1) {
       const itemName = categorySeed.items[itemIndex];
-      const menuItem = await prisma.menuItem.create({
-        data: {
-          categoryId: category.id,
+      
+      const menuItem = await prisma.menuItem.upsert({
+        where: { name: itemName },
+        update: {},
+        create: {
           name: itemName,
           description: `Món ${itemName.toLowerCase()} với 2 lựa chọn dung tích 500ml và 700ml, có thể thêm topping theo sở thích.`,
           imageUrl: buildPlaceholderImage(itemName),
           isAvailable: true,
+        },
+      });
+
+      await prisma.menuItemInCategory.upsert({
+        where: {
+          menuItemId_categoryId: {
+            menuItemId: menuItem.id,
+            categoryId: category.id,
+          },
+        },
+        update: {
+          sortOrder: itemIndex + 1,
+        },
+        create: {
+          menuItemId: menuItem.id,
+          categoryId: category.id,
           sortOrder: itemIndex + 1,
         },
       });
 
-      await prisma.menuItemVariant.createMany({
-        data: [
-          {
-            menuItemId: menuItem.id,
-            name: "Cốc 500ml",
-            sizeMl: 500,
-            price: 30000,
-            sortOrder: 1,
-          },
-          {
-            menuItemId: menuItem.id,
-            name: "Cốc 700ml",
-            sizeMl: 700,
-            price: 40000,
-            sortOrder: 2,
-          },
-        ],
+      // Kiểm tra nếu chưa có variant thì mới tạo
+      const variantCount = await prisma.menuItemVariant.count({
+        where: { menuItemId: menuItem.id },
       });
+
+      if (variantCount === 0) {
+        await prisma.menuItemVariant.createMany({
+          data: [
+            {
+              menuItemId: menuItem.id,
+              name: "Cốc 500ml",
+              sizeMl: 500,
+              price: 30000,
+              sortOrder: 1,
+            },
+            {
+              menuItemId: menuItem.id,
+              name: "Cốc 700ml",
+              sizeMl: 700,
+              price: 40000,
+              sortOrder: 2,
+            },
+          ],
+        });
+      }
     }
   }
 

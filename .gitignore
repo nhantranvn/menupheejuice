@@ -38,3 +38,5 @@ next-env.d.ts
 uploads/menu-imports/
 .env
 node_modules
+db_backup.json
+public/uploads/

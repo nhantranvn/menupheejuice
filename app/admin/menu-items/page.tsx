@@ -29,19 +29,28 @@ export default async function AdminMenuItemsPage() {
     redirect("/menu");
   }
 
-  const categories = await prisma.menuCategory.findMany({
+  const categoriesRaw = await prisma.menuCategory.findMany({
     orderBy: [{ sortOrder: "asc" }, { name: "asc" }],
     include: {
       items: {
-        orderBy: [{ sortOrder: "asc" }, { name: "asc" }],
+        orderBy: [{ sortOrder: "asc" }],
         include: {
-          variants: {
-            orderBy: [{ sortOrder: "asc" }, { sizeMl: "asc" }],
+          menuItem: {
+            include: {
+              variants: {
+                orderBy: [{ sortOrder: "asc" }, { sizeMl: "asc" }],
+              },
+            },
           },
         },
       },
     },
   });
+
+  const categories = categoriesRaw.map((cat) => ({
+    ...cat,
+    items: cat.items.map((link) => link.menuItem),
+  }));
 
   const visibleCategories = categories.filter((category) => category.items.length > 0);
   const emptyCategories = categories.filter((category) => category.items.length === 0);

@@ -89,19 +89,12 @@ export async function initializeStarterMenuAction() {
 
         syncedCategories += 1;
 
-        for (const itemSeed of categorySeed.items) {
+        for (let itemIndex = 0; itemIndex < categorySeed.items.length; itemIndex += 1) {
+          const itemSeed = categorySeed.items[itemIndex];
+          
           const existingItem = await tx.menuItem.findUnique({
-            where: {
-              categoryId_name: {
-                categoryId: category.id,
-                name: itemSeed.name,
-              },
-            },
-            select: {
-              id: true,
-              imageUrl: true,
-              isAvailable: true,
-            },
+            where: { name: itemSeed.name },
+            select: { id: true, imageUrl: true, isAvailable: true },
           });
 
           const item = existingItem
@@ -111,18 +104,15 @@ export async function initializeStarterMenuAction() {
                   description: itemSeed.description ?? null,
                   imageUrl: resolveSyncedImageUrl(existingItem.imageUrl, itemSeed.imageUrl),
                   isAvailable: existingItem.isAvailable,
-                  sortOrder: itemSeed.sortOrder,
                 },
                 select: { id: true },
               })
             : await tx.menuItem.create({
                 data: {
-                  categoryId: category.id,
                   name: itemSeed.name,
                   description: itemSeed.description ?? null,
                   imageUrl: itemSeed.imageUrl ?? null,
                   isAvailable: itemSeed.isAvailable,
-                  sortOrder: itemSeed.sortOrder,
                 },
                 select: { id: true },
               });
@@ -132,6 +122,24 @@ export async function initializeStarterMenuAction() {
           }
 
           syncedItems += 1;
+
+          // Link to Category
+          await tx.menuItemInCategory.upsert({
+            where: {
+              menuItemId_categoryId: {
+                menuItemId: item.id,
+                categoryId: category.id,
+              },
+            },
+            update: {
+              sortOrder: itemSeed.sortOrder,
+            },
+            create: {
+              menuItemId: item.id,
+              categoryId: category.id,
+              sortOrder: itemSeed.sortOrder,
+            },
+          });
 
           for (const variantSeed of itemSeed.variants) {
             await tx.menuItemVariant.upsert({
@@ -190,61 +198,69 @@ export async function initializeStarterMenuAction() {
 }
 
 export async function updateMenuItemImageAction(formData: FormData) {
-  const session = await auth();
+  try {
+    const session = await auth();
 
-  if (session?.user?.role !== "ADMIN") {
-    return { ok: false, error: "Bạn không có quyền cập nhật ảnh món." };
+    if (session?.user?.role !== "ADMIN") {
+      return { ok: false, error: "Bạn không có quyền cập nhật ảnh món." };
+    }
+
+    const parsed = updateMenuItemImageSchema.safeParse({
+      menuItemId: formData.get("menuItemId"),
+    });
+
+    if (!parsed.success) {
+      return { ok: false, error: parsed.error.issues[0]?.message ?? "Dữ liệu món không hợp lệ." };
+    }
+
+    const imageFile = formData.get("image");
+
+    if (!(imageFile instanceof File) || imageFile.size === 0) {
+      return { ok: false, error: "Vui lòng chọn một file ảnh hợp lệ." };
+    }
+
+    if (!ALLOWED_IMAGE_TYPES.has(imageFile.type)) {
+      return { ok: false, error: "Chỉ hỗ trợ ảnh JPG, PNG hoặc WEBP." };
+    }
+
+    if (imageFile.size > 5 * 1024 * 1024) {
+      return { ok: false, error: "Ảnh món cần nhỏ hơn 5MB." };
+    }
+
+    const menuItem = await prisma.menuItem.findUnique({
+      where: { id: parsed.data.menuItemId },
+      select: { id: true, name: true },
+    });
+
+    if (!menuItem) {
+      return { ok: false, error: "Không tìm thấy món cần cập nhật ảnh." };
+    }
+
+    const buffer = Buffer.from(await imageFile.arrayBuffer());
+    const storage = buildMenuItemImageStoragePaths(imageFile.name);
+    const absolutePath = path.join(process.cwd(), storage.relativeDiskPath);
+
+    await mkdir(path.dirname(absolutePath), { recursive: true });
+    await writeFile(absolutePath, buffer);
+
+    await prisma.menuItem.update({
+      where: { id: menuItem.id },
+      data: { imageUrl: storage.publicUrl },
+    });
+
+    revalidateMenuPaths();
+
+    return {
+      ok: true,
+      message: `Đã cập nhật ảnh cho món ${menuItem.name}. Hãy tải lại trang nếu bạn vẫn thấy ảnh cũ trong bộ nhớ đệm trình duyệt.`,
+    };
+  } catch (error) {
+    console.error("updateMenuItemImageAction error:", error);
+    return {
+      ok: false,
+      error: error instanceof Error ? error.message : "Có lỗi xảy ra khi cập nhật ảnh món.",
+    };
   }
-
-  const parsed = updateMenuItemImageSchema.safeParse({
-    menuItemId: formData.get("menuItemId"),
-  });
-
-  if (!parsed.success) {
-    return { ok: false, error: parsed.error.issues[0]?.message ?? "Dữ liệu món không hợp lệ." };
-  }
-
-  const imageFile = formData.get("image");
-
-  if (!(imageFile instanceof File) || imageFile.size === 0) {
-    return { ok: false, error: "Vui lòng chọn một file ảnh hợp lệ." };
-  }
-
-  if (!ALLOWED_IMAGE_TYPES.has(imageFile.type)) {
-    return { ok: false, error: "Chỉ hỗ trợ ảnh JPG, PNG hoặc WEBP." };
-  }
-
-  if (imageFile.size > 5 * 1024 * 1024) {
-    return { ok: false, error: "Ảnh món cần nhỏ hơn 5MB." };
-  }
-
-  const menuItem = await prisma.menuItem.findUnique({
-    where: { id: parsed.data.menuItemId },
-    select: { id: true, name: true },
-  });
-
-  if (!menuItem) {
-    return { ok: false, error: "Không tìm thấy món cần cập nhật ảnh." };
-  }
-
-  const buffer = Buffer.from(await imageFile.arrayBuffer());
-  const storage = buildMenuItemImageStoragePaths(imageFile.name);
-  const absolutePath = path.join(process.cwd(), storage.relativeDiskPath);
-
-  await mkdir(path.dirname(absolutePath), { recursive: true });
-  await writeFile(absolutePath, buffer);
-
-  await prisma.menuItem.update({
-    where: { id: menuItem.id },
-    data: { imageUrl: storage.publicUrl },
-  });
-
-  revalidateMenuPaths();
-
-  return {
-    ok: true,
-    message: `Đã cập nhật ảnh cho món ${menuItem.name}. Hãy tải lại trang nếu bạn vẫn thấy ảnh cũ trong bộ nhớ đệm trình duyệt.`,
-  };
 }
 
 export async function toggleMenuItemAvailabilityAction(input: { menuItemId: string; isAvailable: boolean }) {
@@ -423,42 +439,61 @@ export async function createManualMenuItemAction(formData: FormData) {
         categoryName = category.name;
       }
 
-      const existingItem = await tx.menuItem.findFirst({
-        where: {
-          categoryId,
-          name: parsed.data.name.trim(),
+      const item = await tx.menuItem.upsert({
+        where: { name: parsed.data.name.trim() },
+        update: {
+          description: parsed.data.description?.trim() || null,
+          imageUrl: parsed.data.imageUrl?.trim() || null,
+          isAvailable: parsed.data.isAvailable,
         },
-        select: { id: true },
-      });
-
-      if (existingItem) {
-        throw new Error("Món này đã tồn tại trong danh mục đã chọn.");
-      }
-
-      const lastItem = await tx.menuItem.findFirst({
-        where: { categoryId },
-        orderBy: [{ sortOrder: "desc" }, { createdAt: "desc" }],
-        select: { sortOrder: true },
-      });
-
-      const item = await tx.menuItem.create({
-        data: {
-          categoryId,
+        create: {
           name: parsed.data.name.trim(),
           description: parsed.data.description?.trim() || null,
           imageUrl: parsed.data.imageUrl?.trim() || null,
           isAvailable: parsed.data.isAvailable,
-          sortOrder: (lastItem?.sortOrder ?? 0) + 1,
         },
         select: { id: true, name: true },
       });
 
-      await tx.menuItemVariant.createMany({
-        data: [
-          { menuItemId: item.id, name: "Cốc 500ml", sizeMl: 500, price: 30000, sortOrder: 1 },
-          { menuItemId: item.id, name: "Cốc 700ml", sizeMl: 700, price: 40000, sortOrder: 2 },
-        ],
+      // Link to Category
+      const itemInCategory = await tx.menuItemInCategory.findUnique({
+        where: {
+          menuItemId_categoryId: {
+            menuItemId: item.id,
+            categoryId,
+          },
+        },
       });
+
+      if (!itemInCategory) {
+        const lastItemInCategory = await tx.menuItemInCategory.findFirst({
+          where: { categoryId },
+          orderBy: { sortOrder: "desc" },
+          select: { sortOrder: true },
+        });
+
+        await tx.menuItemInCategory.create({
+          data: {
+            menuItemId: item.id,
+            categoryId,
+            sortOrder: (lastItemInCategory?.sortOrder ?? 0) + 1,
+          },
+        });
+      }
+
+      // Ensure Variants exist
+      const variantCount = await tx.menuItemVariant.count({
+        where: { menuItemId: item.id },
+      });
+
+      if (variantCount === 0) {
+        await tx.menuItemVariant.createMany({
+          data: [
+            { menuItemId: item.id, name: "Cốc 500ml", sizeMl: 500, price: 30000, sortOrder: 1 },
+            { menuItemId: item.id, name: "Cốc 700ml", sizeMl: 700, price: 40000, sortOrder: 2 },
+          ],
+        });
+      }
 
       return { itemName: item.name, categoryName };
     })

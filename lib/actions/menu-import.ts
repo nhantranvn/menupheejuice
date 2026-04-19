@@ -1,4 +1,4 @@
-﻿"use server";
+"use server";
 
 import { mkdir, writeFile } from "fs/promises";
 import path from "path";
@@ -235,35 +235,39 @@ export async function importMenuFromJobAction(input: { jobId: string; categoryNa
 
     for (let index = 0; index < parsedItems.length; index += 1) {
       const item = parsedItems[index];
-      const existingItem = await tx.menuItem.findFirst({
-        where: {
-          categoryId: category.id,
+      
+      const menuItem = await tx.menuItem.upsert({
+        where: { name: item.name },
+        update: {
+          description: item.description,
+          isAvailable: true,
+        },
+        create: {
           name: item.name,
+          description: item.description,
+          imageUrl: null,
+          isAvailable: true,
         },
         select: { id: true },
       });
 
-      const menuItem = existingItem
-        ? await tx.menuItem.update({
-            where: { id: existingItem.id },
-            data: {
-              description: item.description,
-              isAvailable: true,
-              sortOrder: index + 1,
-            },
-            select: { id: true },
-          })
-        : await tx.menuItem.create({
-            data: {
-              categoryId: category.id,
-              name: item.name,
-              description: item.description,
-              imageUrl: null,
-              isAvailable: true,
-              sortOrder: index + 1,
-            },
-            select: { id: true },
-          });
+      // Link to Category
+      await tx.menuItemInCategory.upsert({
+        where: {
+          menuItemId_categoryId: {
+            menuItemId: menuItem.id,
+            categoryId: category.id,
+          },
+        },
+        update: {
+          sortOrder: index + 1,
+        },
+        create: {
+          menuItemId: menuItem.id,
+          categoryId: category.id,
+          sortOrder: index + 1,
+        },
+      });
 
       await ensureDefaultVariants(tx, menuItem.id);
       importedCount += 1;
